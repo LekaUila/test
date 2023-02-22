@@ -20,6 +20,7 @@ INCLUDES = -I SFML_linux/include -I includes
 #=================================SOURCE FILES=================================#
 SRCS =	srcs/main.cpp\
 		srcs/image_loading.cpp\
+		srcs/map.cpp\
 		class/map/CaseMap.cpp
 
 #====================================OBJECTS===================================#

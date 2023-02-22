@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:51:47 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/21 11:52:09 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/02/22 15:55:30 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,24 @@ int main()
     //window.setFramerateLimit(60);
 
     sf::Clock clock;
+
+    std::vector< std::vector<sf::Texture>>	img_array = create_array_texture();
+
+    /*
+    std::vector< std::vector<sf::Sprite>>	sprite_array;
+
+    for (size_t i = 0; i < 4; i++)
+    {
+        std::vector<sf::Sprite> lst_sprite;
+        for (size_t j = 0; j < img_array[i].size(); j++)
+        {
+            sf::Sprite sp;
+            sp.setTexture(img_array[i][j]);
+            lst_sprite.push_back(sp);
+        }
+        sprite_array.push_back(lst_sprite);
+    }*/
+    
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -43,6 +61,7 @@ int main()
 
         // draw everything here...
         // window.draw(...);
+
 
         // end the current frame
         window.display();

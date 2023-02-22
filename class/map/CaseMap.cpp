@@ -6,15 +6,20 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:06:45 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/21 12:19:47 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/02/22 16:35:51 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "CaseMap.hpp"
 
-CaseMap::CaseMap(unsigned int x, unsigned int y, unsigned int z, sf::Image &img, std::string type)
-: x(x), y(y), z(z), img(img), type(type)
+CaseMap::CaseMap()
+: x(0), y(0), z(0), type("none")
+{
+}
+
+CaseMap::CaseMap(unsigned int x, unsigned int y, unsigned int z, std::string type)
+: x(x), y(y), z(z), type(type)
 {
 }
 
@@ -28,6 +33,7 @@ CaseMap::CaseMap (const CaseMap &obj)
 }
 CaseMap& CaseMap::operator=(const CaseMap& x)
 {
+	return (*this);
 }
 
 unsigned int CaseMap::getX() const
@@ -46,7 +52,12 @@ const std::string & CaseMap::getType() const
 {
 	return (this->type);
 }
-const sf::Image & CaseMap::getImg() const
+const sf::Sprite & CaseMap::getImg() const
 {
 	return (this->img);
+}
+
+void CaseMap::setImg(sf::Texture &img)
+{
+	this->img = sf::Sprite(img);
 }

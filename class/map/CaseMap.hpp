@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:06:41 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/21 12:19:06 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/02/22 16:36:03 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ class CaseMap
 {
 private:
 
-	const unsigned int	x;
-	const unsigned int	y;
-	const unsigned int	z;
-	const sf::Image		&img;
-	const std::string		type;
+	unsigned int	x;
+	unsigned int	y;
+	unsigned int	z;
+	std::string	type;
+	sf::Sprite			img;
 
 protected:
 
@@ -30,7 +30,8 @@ protected:
 
 public:
 
-	CaseMap(unsigned int x, unsigned int y, unsigned int z, sf::Image &img, std::string type);					//constructor
+	CaseMap();
+	CaseMap(unsigned int x, unsigned int y, unsigned int z, std::string type);					//constructor
 	~CaseMap();							//destructor
 	CaseMap (const CaseMap &obj);				//copie constructor
 	CaseMap& operator=(const CaseMap& x);		//assignation constructor
@@ -39,7 +40,8 @@ public:
 	unsigned int getY() const;
 	unsigned int getZ() const;
 	const std::string & getType() const;
-	const sf::Image & getImg() const;
+	const sf::Sprite & getImg() const;
+	void setImg(sf::Texture &img);
 
 
  

@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:06:45 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/22 16:35:51 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/02/22 19:16:33 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "CaseMap.hpp"
 
 CaseMap::CaseMap()
-: x(0), y(0), z(0), type("none")
+: x(0), y(0), z(1000), type("none")
 {
 }
 
@@ -33,6 +33,10 @@ CaseMap::CaseMap (const CaseMap &obj)
 }
 CaseMap& CaseMap::operator=(const CaseMap& x)
 {
+	this->x = x.getX();
+	this->y = x.getY();
+	this->z = x.getZ();
+	this->type = x.getType();
 	return (*this);
 }
 
@@ -60,4 +64,5 @@ const sf::Sprite & CaseMap::getImg() const
 void CaseMap::setImg(sf::Texture &img)
 {
 	this->img = sf::Sprite(img);
+	this->img.setPosition(sf::Vector2f(32 * x, 32 * y));
 }

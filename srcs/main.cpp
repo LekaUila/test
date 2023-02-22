@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:51:47 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/22 15:55:30 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/02/22 19:45:25 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int main()
 {
     // create the window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
+    sf::RenderWindow window(sf::VideoMode(850, 850), "My window");
 
     //window.setFramerateLimit(60);
 
@@ -23,6 +23,7 @@ int main()
 
     std::vector< std::vector<sf::Texture>>	img_array = create_array_texture();
 
+    std::vector <std::vector <CaseMap>> map = generate_map(img_array);
     /*
     std::vector< std::vector<sf::Sprite>>	sprite_array;
 
@@ -62,6 +63,7 @@ int main()
         // draw everything here...
         // window.draw(...);
 
+        affiche_map(map, window);
 
         // end the current frame
         window.display();

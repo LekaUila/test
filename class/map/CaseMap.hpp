@@ -6,14 +6,16 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:06:41 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/22 16:36:03 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/02/22 19:43:11 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #ifndef CASEMAP
 # define CASEMAP
-# include "../../includes/main_header.hpp"
+# include <SFML/Graphics.hpp>
+# include <iostream>
+# include <string>
 class CaseMap 
 {
 private:

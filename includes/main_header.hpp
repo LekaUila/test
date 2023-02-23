@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:49:47 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/22 19:39:06 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/02/23 15:20:12 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@
 # include <vector>
 # include <map>
 # include "../class/map/CaseMap.hpp"
-# define WIDTH_MAP 25
-# define HEIGHT_MAP 25
+# define WIDTH_MAP 30
+# define HEIGHT_MAP 30
+# define WIDTH_WIN 850
+# define HEIGHT_WIN 850
 
 enum e_type 
 {
@@ -36,7 +38,7 @@ enum e_type
 
 std::vector< std::vector<sf::Texture>> create_array_texture(void);
 
-std::vector < std::vector<CaseMap> > generate_map(std::vector< std::vector<sf::Texture>> & img_array);
-void	affiche_map(std::vector <std::vector <CaseMap>> & map, sf::RenderWindow & window);
+std::vector < std::vector<CaseMap> > generate_map(std::vector< std::vector<sf::Sprite>> & img_array);
+void	affiche_map(std::vector <std::vector <CaseMap>> & map, sf::RenderWindow & window, unsigned int xadd, unsigned int yadd);
 
 #endif

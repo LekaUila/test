@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:06:45 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/22 19:16:33 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/02/23 15:28:53 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ CaseMap& CaseMap::operator=(const CaseMap& x)
 	this->y = x.getY();
 	this->z = x.getZ();
 	this->type = x.getType();
+	this->img = x.getImg();
 	return (*this);
 }
 
@@ -52,17 +53,27 @@ unsigned int CaseMap::getZ() const
 {
 	return (this->z);
 }
+void CaseMap::setZ(unsigned int z)
+{
+	this->z = z;
+}
+
 const std::string & CaseMap::getType() const
 {
 	return (this->type);
 }
-const sf::Sprite & CaseMap::getImg() const
+sf::Sprite * CaseMap::getImg() const
 {
 	return (this->img);
 }
 
-void CaseMap::setImg(sf::Texture &img)
+void CaseMap::setImg(sf::Sprite &img)
 {
-	this->img = sf::Sprite(img);
-	this->img.setPosition(sf::Vector2f(32 * x, 32 * y));
+	this->img = &img;
+}
+
+void CaseMap::draw(sf::RenderWindow & window, unsigned int xadd, unsigned int yadd)
+{
+	this->img->setPosition(sf::Vector2<float>((this->x * 32 + xadd) , (this->y * 32 + yadd)));
+	window.draw(*this->img);
 }

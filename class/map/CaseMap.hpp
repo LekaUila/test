@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:06:41 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/23 13:10:24 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/02/23 18:58:52 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ private:
 	unsigned int	y;
 	unsigned int	z;
 	std::string		type;
-	sf::Sprite		*img;
+	sf::Sprite		*img = NULL;
 
 protected:
 
@@ -40,9 +40,12 @@ public:
 
 	unsigned int getX() const;
 	unsigned int getY() const;
+	void setX(unsigned int x);
+	void setY(unsigned int y);
 	unsigned int getZ() const;
 	void setZ(unsigned int z);
 	const std::string & getType() const;
+	void setType(std::string type);
 	sf::Sprite * getImg() const;
 	void setImg(sf::Sprite &img);
 	void draw(sf::RenderWindow & window, unsigned int xadd, unsigned int yadd);

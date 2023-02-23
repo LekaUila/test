@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:06:45 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/23 15:28:53 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/02/23 18:59:40 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,16 @@ unsigned int CaseMap::getY() const
 {
 	return (this->y);
 }
+
+void CaseMap::setX(unsigned int x)
+{
+	this->x = x;
+}
+void CaseMap::setY(unsigned int y)
+{
+	this->y = y;
+}
+
 unsigned int CaseMap::getZ() const
 {
 	return (this->z);
@@ -62,6 +72,11 @@ const std::string & CaseMap::getType() const
 {
 	return (this->type);
 }
+void CaseMap::setType(std::string type)
+{
+	this->type = type;
+}
+
 sf::Sprite * CaseMap::getImg() const
 {
 	return (this->img);

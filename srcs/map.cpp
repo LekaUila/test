@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:00:59 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/23 18:04:27 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/02/23 19:13:24 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static	void print_map(std::vector <std::vector <CaseMap>> & map)
 		std::cout << std::endl;
 	}
 }
-
+/*
 static	int smoothing(std::vector <std::vector <CaseMap>> & map, unsigned int x, unsigned int y)
 {
 	int need_a_wall = (x != 0 && map[x - 1][y].getZ() != map[x][y].getZ());
@@ -149,10 +149,12 @@ static	int smoothing(std::vector <std::vector <CaseMap>> & map, unsigned int x, 
 		return (1);
 	}
 	return (0);
-}
+}*/
 
 static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y)
 {
+	if (map[x][y].getImg() != NULL)
+		return ;
 	std::string	type_tab[3] = { "water", "sand", "grass"};
 	int type = WATER;
 	
@@ -299,6 +301,34 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 	}
 }
 
+static void vertical_move(std::vector <std::vector <CaseMap>> & map, unsigned int x, unsigned int y, unsigned int z)
+{
+	if (y != 0 && map[x][y].getZ() == z)
+	{
+		vertical_move(map, x, y - 1, z);
+	}
+	map[x][y] = map[x][y + 1];
+	map[x][y].setX(x);
+	map[x][y].setY(y);
+}
+
+static void add_big_wall(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y)
+{
+	if (y != 0 && map[x][y - 1].getZ() > map[x][y].getZ())
+	{
+		for (size_t i = map[x][y - 1].getZ() - map[x][y].getZ() - 1; i != 0 ; i--)
+		{
+			vertical_move(map, x, y - 2, map[x][y - 1].getZ());
+			map[x][y - 1].setImg(img_array[WALL][0]);
+			map[x][y - 1].setType("wall");
+			vertical_move(map, x, y - 2, map[x][y - 1].getZ());
+			map[x][y - 1].setImg(img_array[WALL][0]);
+			map[x][y - 1].setType("wall");
+		}
+
+	} 
+}
+
 static std::string	getMyType(std::vector <std::vector <CaseMap>> & map,  unsigned int x, unsigned int y)
 {
 	std::vector<std::string> tab;
@@ -375,13 +405,13 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 		}
 		map.push_back(vect);
 	}
-	int z_first = std::rand() % 4;
+	int z_first = std::rand() % 3;
 	std::string type_first = type_tab[std::rand() % 3];
 	map[0][0] = CaseMap(0, 0, z_first, type_first);
 	map[1][0] = CaseMap(1, 0, z_first, type_first);
 	map[0][1] = CaseMap(0, 1, z_first, type_first);
 	map[1][1] = CaseMap(1, 1, z_first, type_first);
-	for (size_t i = 0; i < 25; i++) /* (WIDTH_MAP * HEIGHT_MAP) / 1000*/
+	for (size_t i = 0; i < RANDOM_LEVEL; i++) /* (WIDTH_MAP * HEIGHT_MAP) / 1000*/
 	{
 
 		int x = 3;
@@ -391,7 +421,7 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 			x = std::rand() % (WIDTH_MAP - 1);
 			y = std::rand() % (HEIGHT_MAP - 1);
 		}
-		int z = std::rand() % 4;
+		int z = std::rand() % 3;
 		std::string type_ = type_tab[std::rand() % 3];
 		CaseMap casem1(x, y, z, type_);
 		CaseMap casem2(x + 1, y, z, type_);
@@ -401,10 +431,8 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 		map[x + 1][y] = casem2;
 		map[x][y + 1] = casem3;
 		map[x + 1][y + 1] = casem4;
-		print_map(map);
 		if (x + 2 < WIDTH_MAP)
 			recursive_generating(map, x + 2, y, 15, 1);
-		print_map(map);
 	}
 	
 	for (size_t y = 0; y < HEIGHT_MAP; y++)
@@ -416,6 +444,14 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 				//std::cout << x << " : " << y << std::endl;
 				recursive_generating(map, x, y, 10, 1);
 			}
+		}
+	}
+	print_map(map);
+	for (size_t y = 0; y < HEIGHT_MAP; y++)
+	{
+		for (size_t x = 0; x < WIDTH_MAP; x++)
+		{
+			add_big_wall(map, img_array, x, y);
 		}
 	}
 	print_map(map);
@@ -438,7 +474,6 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 		}
 		//std::cout << std::endl << std::endl << std::endl;
 	}*/
-	
 	for (size_t y = 0; y < HEIGHT_MAP; y++)
 	{
 		for (size_t x = 0; x < WIDTH_MAP; x++)
@@ -475,6 +510,9 @@ void	affiche_map(std::vector<std::vector<CaseMap>> & map, sf::RenderWindow & win
 
 
 	sf::RectangleShape rectangle(sf::Vector2f(64 + WIDTH_WIN, 32));
+
+
+	
 	rectangle.setFillColor(sf::Color(0, 0, 0));
 	rectangle.setPosition(sf::Vector2f(0, 0));
 	window.draw(rectangle);
@@ -489,7 +527,7 @@ void	affiche_map(std::vector<std::vector<CaseMap>> & map, sf::RenderWindow & win
 
 	/*tempo*/
 
-	
+	/*
 	rectangle.setFillColor(sf::Color(255, 0, 0));
 	rectangle.setSize(sf::Vector2f(1, 64 + HEIGHT_WIN));
 	for (size_t i = 0; i < WIDTH_WIN + 64; i += 32)
@@ -502,6 +540,6 @@ void	affiche_map(std::vector<std::vector<CaseMap>> & map, sf::RenderWindow & win
 	{
 			rectangle.setPosition(sf::Vector2f(0, i));
 			window.draw(rectangle);
-	}
+	}*/
 	
 }

@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:00:59 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/23 16:14:43 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/02/23 18:04:27 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,10 @@ static	void print_map(std::vector <std::vector <CaseMap>> & map)
 	{
 		for (size_t x = 0; x < WIDTH_MAP; x++)
 		{
-			std::cout << map[x][y].getZ() << "  ";
+			if (map[x][y].getZ() != 1000)
+				std::cout << map[x][y].getZ() << "  ";
+			else
+				std::cout  << "   ";
 		}
 		std::cout << " " << y  << std::endl;
 		std::cout << std::endl;
@@ -92,17 +95,36 @@ static	int smoothing(std::vector <std::vector <CaseMap>> & map, unsigned int x, 
 	int need_a_wall = (x != 0 && map[x - 1][y].getZ() != map[x][y].getZ());
 	need_a_wall += (x != 0 && y != 0 && map[x - 1][y - 1].getZ() != map[x][y].getZ());
 	need_a_wall += (x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getZ() != map[x][y].getZ());
+	
 	need_a_wall += (y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() != map[x][y].getZ());
 	need_a_wall += (y != 0 && map[x][y - 1].getZ() != map[x][y].getZ());
+
 	need_a_wall += (x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() != map[x][y].getZ());
 	need_a_wall += (x + 1 < WIDTH_MAP && map[x + 1][y].getZ() != map[x][y].getZ());
 	need_a_wall += (x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getZ() != map[x][y].getZ());
+
+	int need_a_wall_spe = 0;
+	need_a_wall_spe += ((x != 0 && map[x - 1][y].getZ() == map[x][y].getZ()) 
+		&& (x != 0 && y != 0 && map[x - 1][y - 1].getZ() == map[x][y].getZ()) 
+		&& (x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getZ() == map[x][y].getZ()));
+
+	need_a_wall_spe += ((x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() == map[x][y].getZ()) 
+		&& (x + 1 < WIDTH_MAP && map[x + 1][y].getZ() == map[x][y].getZ())
+		&& (x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getZ() == map[x][y].getZ()));
+
+	need_a_wall_spe += ((x != 0 && y != 0 && map[x - 1][y - 1].getZ() == map[x][y].getZ()) 
+		&& (y != 0 && map[x][y - 1].getZ() == map[x][y].getZ())
+		&& (x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() == map[x][y].getZ()));
+
+	need_a_wall_spe += ((x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getZ() == map[x][y].getZ())
+		&& (y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() == map[x][y].getZ())
+		&& (x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getZ() == map[x][y].getZ()));
 	
-	if (need_a_wall > 5)
+	if (need_a_wall > 5 || (need_a_wall == 4 && need_a_wall_spe))
 	{
 		unsigned int tabint[5] = {0, 0, 0, 0, 0 };
 
-		std::cout << "x : " << x << " | y : " << y << " | actual : " << map[x][y].getZ() << std::endl;
+	//	std::cout << "x : " << x << " | y : " << y << " | actual : " << map[x][y].getZ() << std::endl;
 
 		tabint[((x != 0) ? map[x - 1][y].getZ() : 4)]++;
 		tabint[((x != 0 && y != 0) ? map[x - 1][y - 1].getZ() : 4)]++;
@@ -113,17 +135,17 @@ static	int smoothing(std::vector <std::vector <CaseMap>> & map, unsigned int x, 
 		tabint[((x + 1 < WIDTH_MAP) ? map[x + 1][y].getZ() : 4)]++;
 		tabint[((x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP) ?map[x + 1][y + 1].getZ() : 4)]++;
 		//std::cout << "0 : " << tabint[0] << "1 : " << tabint[1] << "2 : " << tabint[2] << "3 : " << tabint[3] << std::end;
-		if (tabint[0] > tabint[1] && tabint[0] > tabint[2] && tabint[0] > tabint[3] && map[x][y].getZ() != 0)
+		if (tabint[0] >= tabint[1] && tabint[0] >= tabint[2] && tabint[0] >= tabint[3] && map[x][y].getZ() != 0)
 			map[x][y].setZ(0);
-		else if (tabint[1] > tabint[0] && tabint[1] > tabint[2] && tabint[1] > tabint[3] && map[x][y].getZ() != 1)
+		else if (tabint[1] >= tabint[0] && tabint[1] >= tabint[2] && tabint[1] >= tabint[3] && map[x][y].getZ() != 1)
 			map[x][y].setZ(1);
-		else if (tabint[2] > tabint[1] && tabint[2] > tabint[0] && tabint[2] > tabint[3] && map[x][y].getZ() != 2)
+		else if (tabint[2] >= tabint[1] && tabint[2] >= tabint[0] && tabint[2] >= tabint[3] && map[x][y].getZ() != 2)
 			map[x][y].setZ(2);
-		else if (tabint[3] > tabint[1] && tabint[3] > tabint[0] && tabint[3] > tabint[0] && map[x][y].getZ() != 3)
+		else if (tabint[3] >= tabint[1] && tabint[3] >= tabint[0] && tabint[3] >= tabint[0] && map[x][y].getZ() != 3)
 			map[x][y].setZ(3);
 		else 
 			map[x][y].setZ(std::rand() % 4);
-		std::cout << "x : " << x << " | y : " << y << " | new : " << map[x][y].getZ() << std::endl << std::endl;
+		//std::cout << "x : " << x << " | y : " << y << " | new : " << map[x][y].getZ() << std::endl << std::endl;
 		return (1);
 	}
 	return (0);
@@ -170,27 +192,27 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 		case 3:
 			//std::cout << "Enter corner" << std::endl;
 			if ((x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getZ() < map[x][y].getZ()) && /* inferieur droit */
-					(y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() > map[x][y].getZ()) && 
-					(x + 1 < WIDTH_MAP && map[x + 1][y].getZ() > map[x][y].getZ()))
+					(y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() < map[x][y].getZ()) && 
+					(x + 1 < WIDTH_MAP && map[x + 1][y].getZ() < map[x][y].getZ()))
 			{
 				map[x][y].setImg(img_array[WALL][4 + typebis * 6]); // 4
 				return ;
 			}	
 			else if ((x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getZ() < map[x][y].getZ()) && /* inferieur gauche */
-						(x != 0 && map[x - 1][y].getZ() > map[x][y].getZ()) &&
-						(y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() > map[x][y].getZ()))
+						(x != 0 && map[x - 1][y].getZ() < map[x][y].getZ()) &&
+						(y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() < map[x][y].getZ()))
 			{
 				map[x][y].setImg(img_array[WALL][3 + typebis * 6]); // 3
 				return ;
 			}
-			else if ((x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() != map[x][y].getZ()) && /* superieur droit */
+			else if ((x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() < map[x][y].getZ()) && /* superieur droit */
 						(x + 1 < WIDTH_MAP && map[x + 1][y].getZ() != map[x][y].getZ()) &&
 						(y != 0 && map[x][y - 1].getZ() != map[x][y].getZ()))
 			{
 				map[x][y].setImg(img_array[WALL][6 + typebis * 6]); // 6
 				return ;
 			}
-			else if ((x != 0 && y != 0 && map[x - 1][y - 1].getZ() != map[x][y].getZ()) && /* superieur gauche */
+			else if ((x != 0 && y != 0 && map[x - 1][y - 1].getZ() < map[x][y].getZ()) && /* superieur gauche */
 						(x != 0 && map[x - 1][y].getZ() != map[x][y].getZ()) &&
 						(y != 0 && map[x][y - 1].getZ() != map[x][y].getZ())) 
 			{
@@ -203,12 +225,12 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 
 		case 1:
 			//std::cout << "Enter lign" << std::endl;
-			if ((x != 0 && map[x - 1][y].getZ() != map[x][y].getZ()))
+			if ((x != 0 && map[x - 1][y].getZ() < map[x][y].getZ()))
 			{
 				map[x][y].setImg(img_array[WALL][1 + typebis * 6]);
 				return ;
 			}
-			else if ((x + 1 < WIDTH_MAP && map[x + 1][y].getZ() != map[x][y].getZ()))
+			else if ((x + 1 < WIDTH_MAP && map[x + 1][y].getZ() < map[x][y].getZ()))
 			{
 				map[x][y].setImg(img_array[typebis][1 + WALL * 6]);
 				return ;
@@ -226,22 +248,30 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 			if (need_a_wall == 1)
 			{
 			//std::cout << "Enter reverse corner" << std::endl;
-			if ((x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getZ() < map[x][y].getZ()))
+			if ((x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getZ() < map[x][y].getZ()) /*&& // inferieur droit 
+					(y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() == map[x][y].getZ()) && 
+					(x + 1 < WIDTH_MAP && map[x + 1][y].getZ() == map[x][y].getZ())*/)
 			{
 				map[x][y].setImg(img_array[typebis][5 + WALL * 6]); // 5
 				return ;
 			}	
-			else if ((x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getZ() < map[x][y].getZ()))
+			else if ((x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getZ() < map[x][y].getZ()) /*&& // inferieur gauche 
+						(x != 0 && map[x - 1][y].getZ() == map[x][y].getZ()) &&
+						(y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() == map[x][y].getZ())*/)
 			{
 				map[x][y].setImg(img_array[typebis][6 + WALL * 6]); // 6
 				return ;
 			}	
-			else if ((x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() != map[x][y].getZ()))
+			else if ((x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() < map[x][y].getZ()) && // superieur droit 
+						(x + 1 < WIDTH_MAP && map[x + 1][y].getZ() == map[x][y].getZ()) &&
+						(y != 0 && map[x][y - 1].getZ() == map[x][y].getZ()))
 			{
 				map[x][y].setImg(img_array[typebis][3 + WALL * 6]); // 3
 				return ;
 			}
-			else if ((x != 0 && y != 0 && map[x - 1][y - 1].getZ() != map[x][y].getZ())) 
+			else if ((x != 0 && y != 0 && map[x - 1][y - 1].getZ() < map[x][y].getZ()) && // superieur gauche 
+						(x != 0 && map[x - 1][y].getZ() == map[x][y].getZ()) &&
+						(y != 0 && map[x][y - 1].getZ() == map[x][y].getZ())) 
 			{
 				map[x][y].setImg(img_array[typebis][4 + WALL * 6]); // 4
 				return ;
@@ -308,15 +338,24 @@ static unsigned int	getMyZ(std::vector <std::vector <CaseMap>> & map,  unsigned 
 
 static void	recursive_generating(std::vector <std::vector <CaseMap>> & map,  unsigned int x, unsigned int y, unsigned int max, int force)
 {
-	if ( x < WIDTH_MAP && y < HEIGHT_MAP && max && (force || std::rand() % 50 > 30) && map[x][y].getType() == "none")
+	if ( x < WIDTH_MAP && x + 1 < WIDTH_MAP  && y < HEIGHT_MAP && y + 1 < HEIGHT_MAP &&  max && (force || std::rand() % 50 > 30) && map[x][y].getType() == "none")
 	{
 		std::string type = getMyType(map, x, y);
 		int			z    = getMyZ(map, x, y);
 		map[x][y] = CaseMap(x, y, z, type);
-		recursive_generating(map, x + 1, y, max - 1, 0);
-		recursive_generating(map, x - 1, y, max - 1, 0);
-		recursive_generating(map, x, y + 1, max - 1, 0);
-		recursive_generating(map, x, y - 1, max - 1, 0);
+		map[x + 1][y] = CaseMap(x + 1, y, z, type);
+		map[x][y + 1] = CaseMap(x, y + 1, z, type);
+		map[x + 1][y + 1] = CaseMap(x + 1, y + 1, z, type);
+		recursive_generating(map, x + 2, y, max - 1, 0);
+		recursive_generating(map, x - 2, y, max - 1, 0);
+		recursive_generating(map, x, y + 2, max - 1, 0);
+		recursive_generating(map, x, y - 2, max - 1, 0);
+	}
+	else if ( x < WIDTH_MAP && (x + 1 == WIDTH_MAP || y + 1 == HEIGHT_MAP)   && y < HEIGHT_MAP  &&  max && force && map[x][y].getType() == "none")
+	{
+		std::string type = getMyType(map, x, y);
+		int			z    = getMyZ(map, x, y);
+		map[x][y] = CaseMap(x, y, z, type);
 	}
 }
 
@@ -336,17 +375,38 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 		}
 		map.push_back(vect);
 	}
-	CaseMap first(0, 0, std::rand() % 4, type_tab[std::rand() % 3]);
-	map[0][0] = first;
+	int z_first = std::rand() % 4;
+	std::string type_first = type_tab[std::rand() % 3];
+	map[0][0] = CaseMap(0, 0, z_first, type_first);
+	map[1][0] = CaseMap(1, 0, z_first, type_first);
+	map[0][1] = CaseMap(0, 1, z_first, type_first);
+	map[1][1] = CaseMap(1, 1, z_first, type_first);
 	for (size_t i = 0; i < 25; i++) /* (WIDTH_MAP * HEIGHT_MAP) / 1000*/
 	{
-		int x = std::rand() % WIDTH_MAP;
-		int y = std::rand() % HEIGHT_MAP;
-		CaseMap casem(x, y, std::rand() % 4, type_tab[std::rand() % 3]);
-		map[x][y] = casem;
-		recursive_generating(map, x - 1, y, 15, 1);
+
+		int x = 3;
+		int y = 3;
+		while (x % 2 != 0 || y % 2 != 0 )
+		{
+			x = std::rand() % (WIDTH_MAP - 1);
+			y = std::rand() % (HEIGHT_MAP - 1);
+		}
+		int z = std::rand() % 4;
+		std::string type_ = type_tab[std::rand() % 3];
+		CaseMap casem1(x, y, z, type_);
+		CaseMap casem2(x + 1, y, z, type_);
+		CaseMap casem3(x, y + 1, z, type_);
+		CaseMap casem4(x + 1, y + 1, z, type_);
+		map[x][y] = casem1;
+		map[x + 1][y] = casem2;
+		map[x][y + 1] = casem3;
+		map[x + 1][y + 1] = casem4;
+		print_map(map);
+		if (x + 2 < WIDTH_MAP)
+			recursive_generating(map, x + 2, y, 15, 1);
+		print_map(map);
 	}
-	//print_map(map);
+	
 	for (size_t y = 0; y < HEIGHT_MAP; y++)
 	{
 		for (size_t x = 0; x < WIDTH_MAP; x++)
@@ -359,12 +419,14 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 		}
 	}
 	print_map(map);
-
+/*
 	int smooth_check = 1;
-	while (smooth_check)
+	int count = 0;
+	while (smooth_check && count < 2000)
 	{
+		count++;
 		smooth_check = 0;
-		std::cout << "new smooth" << std::endl;
+		//std::cout << "new smooth" << std::endl;
 		for (size_t y = 0; y < HEIGHT_MAP; y++)
 		{
 			for (size_t x = 0; x < WIDTH_MAP; x++)
@@ -374,8 +436,8 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 				
 			}
 		}
-		std::cout << std::endl << std::endl << std::endl;
-	}
+		//std::cout << std::endl << std::endl << std::endl;
+	}*/
 	
 	for (size_t y = 0; y < HEIGHT_MAP; y++)
 	{
@@ -416,7 +478,7 @@ void	affiche_map(std::vector<std::vector<CaseMap>> & map, sf::RenderWindow & win
 	rectangle.setFillColor(sf::Color(0, 0, 0));
 	rectangle.setPosition(sf::Vector2f(0, 0));
 	window.draw(rectangle);
-	rectangle.setPosition(sf::Vector2f(0, 32 + HEIGHT_WIN));
+	rectangle.setPosition(sf::Vector2f(0, 32 + HEIGHT_WIN + 1));
 	window.draw(rectangle);
 	rectangle.setSize(sf::Vector2f(32, 64 + HEIGHT_WIN));
 	rectangle.setPosition(sf::Vector2f(0, 0));
@@ -426,6 +488,8 @@ void	affiche_map(std::vector<std::vector<CaseMap>> & map, sf::RenderWindow & win
 
 
 	/*tempo*/
+
+	
 	rectangle.setFillColor(sf::Color(255, 0, 0));
 	rectangle.setSize(sf::Vector2f(1, 64 + HEIGHT_WIN));
 	for (size_t i = 0; i < WIDTH_WIN + 64; i += 32)

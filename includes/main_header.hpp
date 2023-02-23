@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:49:47 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/23 15:20:12 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/02/23 17:35:51 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # include "../class/map/CaseMap.hpp"
 # define WIDTH_MAP 30
 # define HEIGHT_MAP 30
-# define WIDTH_WIN 850
-# define HEIGHT_WIN 850
+# define WIDTH_WIN 800
+# define HEIGHT_WIN 800
 
 enum e_type 
 {

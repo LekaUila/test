@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:00:59 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/23 19:13:24 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/02/24 15:40:56 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,15 +301,30 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 	}
 }
 
-static void vertical_move(std::vector <std::vector <CaseMap>> & map, unsigned int x, unsigned int y, unsigned int z)
+
+static void vertical_decr(std::vector <std::vector <CaseMap>> & map, unsigned int x, unsigned int y, unsigned int z )
 {
 	if (y != 0 && map[x][y].getZ() == z)
 	{
-		vertical_move(map, x, y - 1, z);
+		vertical_decr(map, x, y - 1, z);
+		map[x][y].setZ(z - 1);
 	}
-	map[x][y] = map[x][y + 1];
-	map[x][y].setX(x);
-	map[x][y].setY(y);
+}
+
+static int vertical_move(std::vector <std::vector <CaseMap>> & map, unsigned int x, unsigned int y, unsigned int z,  int count)
+{
+	if (y != 0 && map[x][y].getZ() == z)
+	{
+		if (vertical_move(map, x, y - 1, z, count + 1) == 0)
+			return 0;
+		map[x][y] = map[x][y + 1];
+		map[x][y].setX(x);
+		map[x][y].setY(y);
+		map[x][y].setZ(z);
+	}
+	else if ( count < 2)
+		return 0;
+	return (1);
 }
 
 static void add_big_wall(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y)
@@ -318,12 +333,22 @@ static void add_big_wall(std::vector <std::vector <CaseMap>> & map, std::vector<
 	{
 		for (size_t i = map[x][y - 1].getZ() - map[x][y].getZ() - 1; i != 0 ; i--)
 		{
-			vertical_move(map, x, y - 2, map[x][y - 1].getZ());
-			map[x][y - 1].setImg(img_array[WALL][0]);
-			map[x][y - 1].setType("wall");
-			vertical_move(map, x, y - 2, map[x][y - 1].getZ());
-			map[x][y - 1].setImg(img_array[WALL][0]);
-			map[x][y - 1].setType("wall");
+			if (vertical_move(map, x, y - 2, map[x][y - 1].getZ(), 0))
+			{
+				map[x][y - 1].setImg(img_array[WALL][0]);
+				map[x][y - 1].setType("wall");
+				map[x][y - 1].setZ(1);
+				/*
+				vertical_move(map, x, y - 2, map[x][y - 1].getZ(), -1);
+				map[x][y - 1].setImg(img_array[WALL][0]);
+				map[x][y - 1].setType("wall");
+				map[x][y - 1].setZ(1);*/
+			}
+			else
+			{
+				vertical_decr(map, x, y - 1, map[x][y - 1].getZ());
+			}
+
 		}
 
 	} 
@@ -540,6 +565,6 @@ void	affiche_map(std::vector<std::vector<CaseMap>> & map, sf::RenderWindow & win
 	{
 			rectangle.setPosition(sf::Vector2f(0, i));
 			window.draw(rectangle);
-	}*/
-	
+	}
+	*/
 }

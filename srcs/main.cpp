@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:51:47 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/23 12:08:10 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/01 16:27:22 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,12 @@ int main()
             sf::Sprite sp;
             sp.setTexture(img_array[i][j]);
             lst_sprite.push_back(sp);
+
         }
         sprite_array.push_back(lst_sprite);
     }
     std::vector <std::vector <CaseMap>> map = generate_map(sprite_array);
-    std::vector<unsigned int> camera(2);
+    std::vector<float> camera(2);
     camera[0] = (WIDTH_MAP * 32 / 2);
     camera[1] = (HEIGHT_MAP * 32 / 2);
 
@@ -58,21 +59,21 @@ int main()
         std::string title(std::to_string(fps));
         window.setTitle(title);
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && camera[0] - (WIDTH_WIN / 2) != 0 )
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && camera[0] - (WIDTH_WIN / 2) - MOVE_SPEED >= 0 )
         {
-            camera[0]--;
+            camera[0]-= MOVE_SPEED;
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && camera[0] - (WIDTH_WIN / 2) + 1 < (WIDTH_MAP * 32) - (WIDTH_WIN))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && camera[0] - (WIDTH_WIN / 2) + MOVE_SPEED < (WIDTH_MAP * 32) - (WIDTH_WIN))
         {
-            camera[0]++;
+            camera[0]+= MOVE_SPEED;
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && camera[1] - (HEIGHT_WIN / 2) != 0 )
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && camera[1] - (HEIGHT_WIN / 2) - MOVE_SPEED >= 0 )
         {
-            camera[1]--;
+            camera[1]-= MOVE_SPEED;
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && camera[1] - (HEIGHT_WIN / 2) + 1 < (HEIGHT_MAP * 32) - (WIDTH_WIN))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && camera[1] - (HEIGHT_WIN / 2) + MOVE_SPEED < (HEIGHT_MAP * 32) - (WIDTH_WIN))
         {
-            camera[1]++;
+            camera[1]+= MOVE_SPEED;
         }
 
         // clear the window with black color
@@ -80,8 +81,21 @@ int main()
 
         // draw everything here...
         // window.draw(...);
-
+        //std::cout << sprite_array[0].size();
         affiche_map(map, window, camera[0] - (WIDTH_WIN / 2), camera[1] - (HEIGHT_WIN / 2));
+        
+        /*
+        //affiche mem img
+        for (size_t i = 0; i < sprite_array.size(); i++)
+        {
+            for (size_t j = 0; j < sprite_array[i].size(); j++)
+            {
+                sprite_array[i][j].setPosition(sf::Vector2f(i * 32, j * 32));
+                window.draw(sprite_array[i][j]);
+            }
+            
+        }*/
+        
 
         // end the current frame
         window.display();

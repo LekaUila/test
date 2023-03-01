@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:06:45 by lflandri          #+#    #+#             */
-/*   Updated: 2023/02/23 18:59:40 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/01 16:49:32 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,11 @@ void CaseMap::setY(unsigned int y)
 	this->y = y;
 }
 
-unsigned int CaseMap::getZ() const
+float CaseMap::getZ() const
 {
 	return (this->z);
 }
-void CaseMap::setZ(unsigned int z)
+void CaseMap::setZ(float z)
 {
 	this->z = z;
 }

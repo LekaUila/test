@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:00:59 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/01 17:15:09 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/02/24 15:40:56 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,111 +193,91 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 		case 4:
 		case 3:
 			//std::cout << "Enter corner" << std::endl;
-			if (/*(x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getZ() < map[x][y].getZ()) &&*/ /* inferieur droit */
+			if ((x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getZ() < map[x][y].getZ()) && /* inferieur droit */
 					(y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() < map[x][y].getZ()) && 
 					(x + 1 < WIDTH_MAP && map[x + 1][y].getZ() < map[x][y].getZ()))
 			{
-				map[x][y].setImg(img_array[typebis][19 + 5]); // 4
+				map[x][y].setImg(img_array[WALL][4 + typebis * 6]); // 4
 				return ;
-			}
-			else if (/*(x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getZ() < map[x][y].getZ()) && *//* inferieur gauche */
+			}	
+			else if ((x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getZ() < map[x][y].getZ()) && /* inferieur gauche */
 						(x != 0 && map[x - 1][y].getZ() < map[x][y].getZ()) &&
 						(y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() < map[x][y].getZ()))
 			{
-				map[x][y].setImg(img_array[typebis][19 + 4]); // 3
+				map[x][y].setImg(img_array[WALL][3 + typebis * 6]); // 3
 				return ;
 			}
-			else if (/*(x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() < map[x][y].getZ()) &&*/ /* superieur droit */
-						(x + 1 < WIDTH_MAP && map[x + 1][y].getZ() < map[x][y].getZ()) &&
-						(y != 0 && map[x][y - 1].getZ() < map[x][y].getZ()))
+			else if ((x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() < map[x][y].getZ()) && /* superieur droit */
+						(x + 1 < WIDTH_MAP && map[x + 1][y].getZ() != map[x][y].getZ()) &&
+						(y != 0 && map[x][y - 1].getZ() != map[x][y].getZ()))
 			{
-				map[x][y].setImg(img_array[typebis][19 + 8]); // 6
+				map[x][y].setImg(img_array[WALL][6 + typebis * 6]); // 6
 				return ;
 			}
-			else if (/*(x != 0 && y != 0 && map[x - 1][y - 1].getZ() < map[x][y].getZ()) &&*/ /* superieur gauche */
-						(x != 0 && map[x - 1][y].getZ() < map[x][y].getZ()) &&
-						(y != 0 && map[x][y - 1].getZ() < map[x][y].getZ())) 
+			else if ((x != 0 && y != 0 && map[x - 1][y - 1].getZ() < map[x][y].getZ()) && /* superieur gauche */
+						(x != 0 && map[x - 1][y].getZ() != map[x][y].getZ()) &&
+						(y != 0 && map[x][y - 1].getZ() != map[x][y].getZ())) 
 			{
-				map[x][y].setImg(img_array[typebis][19 + 7]); // 5
+				map[x][y].setImg(img_array[WALL][5 + typebis * 6]); // 5
 				return ;
 			}
 
 
 		case 2:
-			if ((x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() > map[x][y].getZ()) && /* superieur droit */
-						(y != 0 && map[x][y - 1].getZ() != map[x][y].getZ()) && need_a_wall == 2)
-			{
-				map[x][y].setImg(img_array[typebis][19 + 1]); // 6
-				return ;
-			}
-			else if ((x != 0 && y != 0 && map[x - 1][y - 1].getZ() > map[x][y].getZ()) && /* superieur gauche */
-						(y != 0 && map[x][y - 1].getZ() != map[x][y].getZ()) && need_a_wall == 2) 
-			{
-				map[x][y].setImg(img_array[typebis][19 + 2]); // 5
-				return ;
-			}
 
 		case 1:
 			//std::cout << "Enter lign" << std::endl;
 			if ((x != 0 && map[x - 1][y].getZ() < map[x][y].getZ()))
 			{
-				map[x][y].setImg(img_array[typebis][19 + 9]);
+				map[x][y].setImg(img_array[WALL][1 + typebis * 6]);
 				return ;
 			}
 			else if ((x + 1 < WIDTH_MAP && map[x + 1][y].getZ() < map[x][y].getZ()))
 			{
-				map[x][y].setImg(img_array[typebis][19 + 10]);
+				map[x][y].setImg(img_array[typebis][1 + WALL * 6]);
 				return ;
 			}
-			else if ((y != 0 && map[x][y - 1].getZ() < map[x][y].getZ()))
+			else if ((y != 0 && map[x][y - 1].getZ() != map[x][y].getZ()))
 			{
-				map[x][y].setImg(img_array[typebis][19 + 6]);
+				map[x][y].setImg(img_array[WALL][2 + typebis * 6]);
 				return ;
 			}
-			else if ((y != 0 && map[x][y - 1].getZ() > map[x][y].getZ()))
+			else if ((y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() < map[x][y].getZ())) /*ICI*/
 			{
-				map[x][y].setImg(img_array[typebis][19]);
-				return ;
-			}
-			else if ((y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() < map[x][y].getZ()))
-			{
-				map[x][y].setImg(img_array[typebis][19 + 3]);
+				map[x][y].setImg(img_array[typebis][2 + WALL * 6]);
 				return ;
 			}
 			if (need_a_wall == 1)
 			{
 			//std::cout << "Enter reverse corner" << std::endl;
-			
 			if ((x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getZ() < map[x][y].getZ()) /*&& // inferieur droit 
 					(y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() == map[x][y].getZ()) && 
 					(x + 1 < WIDTH_MAP && map[x + 1][y].getZ() == map[x][y].getZ())*/)
 			{
-				map[x][y].setImg(img_array[typebis][19 + 10]); // 5
+				map[x][y].setImg(img_array[typebis][5 + WALL * 6]); // 5
 				return ;
 			}	
 			else if ((x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getZ() < map[x][y].getZ()) /*&& // inferieur gauche 
 						(x != 0 && map[x - 1][y].getZ() == map[x][y].getZ()) &&
 						(y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() == map[x][y].getZ())*/)
 			{
-				map[x][y].setImg(img_array[typebis][19 + 9]); // 6
+				map[x][y].setImg(img_array[typebis][6 + WALL * 6]); // 6
 				return ;
 			}	
 			else if ((x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() < map[x][y].getZ()) && // superieur droit 
 						(x + 1 < WIDTH_MAP && map[x + 1][y].getZ() == map[x][y].getZ()) &&
 						(y != 0 && map[x][y - 1].getZ() == map[x][y].getZ()))
 			{
-				//map[x][y].setImg(img_array[typebis][3 + WALL * 6]); // 3
-				//return ;
+				map[x][y].setImg(img_array[typebis][3 + WALL * 6]); // 3
+				return ;
 			}
 			else if ((x != 0 && y != 0 && map[x - 1][y - 1].getZ() < map[x][y].getZ()) && // superieur gauche 
 						(x != 0 && map[x - 1][y].getZ() == map[x][y].getZ()) &&
 						(y != 0 && map[x][y - 1].getZ() == map[x][y].getZ())) 
 			{
-				//map[x][y].setImg(img_array[typebis][4 + WALL * 6]); // 4
-				//return ;
+				map[x][y].setImg(img_array[typebis][4 + WALL * 6]); // 4
+				return ;
 			}
-			
-		
 			}
 
 			
@@ -308,23 +288,30 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 			break;
 		}
 	}
+
+	for (size_t i = 0; i < 3; i++)
+	{		
+		if (type_tab[i] == map[x][y].getType())
+		{
+			for (size_t j = 0; j < 3; j++)
+			{
+				
+			}
+		}
+	}
 }
 
 
-static void vertical_decr(std::vector <std::vector <CaseMap>> & map, unsigned int x, unsigned int y, float z )
+static void vertical_decr(std::vector <std::vector <CaseMap>> & map, unsigned int x, unsigned int y, unsigned int z )
 {
 	if (y != 0 && map[x][y].getZ() == z)
 	{
 		vertical_decr(map, x, y - 1, z);
 		map[x][y].setZ(z - 1);
 	}
-	else if (y == 0 && map[x][y].getZ() == z)
-	{
-		map[x][y].setZ(z - 1);
-	}
 }
 
-static int vertical_move(std::vector <std::vector <CaseMap>> & map, unsigned int x, unsigned int y, float z,  int count)
+static int vertical_move(std::vector <std::vector <CaseMap>> & map, unsigned int x, unsigned int y, unsigned int z,  int count)
 {
 	if (y != 0 && map[x][y].getZ() == z)
 	{
@@ -335,7 +322,7 @@ static int vertical_move(std::vector <std::vector <CaseMap>> & map, unsigned int
 		map[x][y].setY(y);
 		map[x][y].setZ(z);
 	}
-	else if ( count < 4)
+	else if ( count < 2)
 		return 0;
 	return (1);
 }
@@ -348,24 +335,14 @@ static void add_big_wall(std::vector <std::vector <CaseMap>> & map, std::vector<
 		{
 			if (vertical_move(map, x, y - 2, map[x][y - 1].getZ(), 0))
 			{
-				if (x != 0 && map[x - 1][y - 1].getZ() < map[x][y - 1].getZ() - 1)
-					map[x][y - 1].setImg(img_array[WALL][1]);
-				else if (x + 1 < WIDTH_MAP && map[x + 1][y - 1].getZ() < map[x][y - 1].getZ() - 1)
-					map[x][y - 1].setImg(img_array[WALL][2]);
-				else
-					map[x][y - 1].setImg(img_array[WALL][0]);
+				map[x][y - 1].setImg(img_array[WALL][0]);
 				map[x][y - 1].setType("wall");
 				map[x][y - 1].setZ(1);
-				
-				vertical_move(map, x, y - 3, map[x][y - 1].getZ(), 0);
-				if (x != 0 && map[x - 1][y - 2].getZ() < map[x][y - 2].getZ() - 1)
-					map[x][y - 2].setImg(img_array[WALL][1]);
-				else if (x + 1 < WIDTH_MAP && map[x + 1][y - 2].getZ() < map[x][y - 2].getZ() - 1)
-					map[x][y - 2].setImg(img_array[WALL][2]);
-				else
-					map[x][y - 2].setImg(img_array[WALL][0]);
-				map[x][y - 2].setType("wall");
-				map[x][y - 2].setZ(1);
+				/*
+				vertical_move(map, x, y - 2, map[x][y - 1].getZ(), -1);
+				map[x][y - 1].setImg(img_array[WALL][0]);
+				map[x][y - 1].setType("wall");
+				map[x][y - 1].setZ(1);*/
 			}
 			else
 			{
@@ -454,7 +431,7 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 		map.push_back(vect);
 	}
 	int z_first = std::rand() % 3;
-	std::string type_first = type_tab[std::rand() % 2 + 1];
+	std::string type_first = type_tab[std::rand() % 3];
 	map[0][0] = CaseMap(0, 0, z_first, type_first);
 	map[1][0] = CaseMap(1, 0, z_first, type_first);
 	map[0][1] = CaseMap(0, 1, z_first, type_first);
@@ -470,7 +447,7 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 			y = std::rand() % (HEIGHT_MAP - 1);
 		}
 		int z = std::rand() % 3;
-		std::string type_ = type_tab[std::rand() % 2 + 1];
+		std::string type_ = type_tab[std::rand() % 3];
 		CaseMap casem1(x, y, z, type_);
 		CaseMap casem2(x + 1, y, z, type_);
 		CaseMap casem3(x, y + 1, z, type_);
@@ -495,8 +472,6 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 		}
 	}
 	print_map(map);
-
-	
 	for (size_t y = 0; y < HEIGHT_MAP; y++)
 	{
 		for (size_t x = 0; x < WIDTH_MAP; x++)
@@ -504,8 +479,6 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 			add_big_wall(map, img_array, x, y);
 		}
 	}
-
-
 	print_map(map);
 /*
 	int smooth_check = 1;

@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:06:45 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/01 16:49:32 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/01 19:44:16 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,16 @@ void CaseMap::draw(sf::RenderWindow & window, unsigned int xadd, unsigned int ya
 {
 	this->img->setPosition(sf::Vector2<float>((this->x * 32 + xadd) , (this->y * 32 + yadd)));
 	window.draw(*this->img);
+	
+	for (size_t i = 0; i < this->decors_add.size(); i++)
+	{
+		(*(this->decors_add[i])).setPosition(sf::Vector2<float>((this->x * 32 + xadd) , (this->y * 32 + yadd)));
+		window.draw(*(this->decors_add[i]));
+	}
+	
+}
+
+void CaseMap::addDecors(sf::Sprite &sp)
+{
+	this->decors_add.push_back(&sp);
 }

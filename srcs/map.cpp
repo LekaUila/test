@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:00:59 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/01 17:15:09 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/01 20:05:29 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,71 @@ static	int smoothing(std::vector <std::vector <CaseMap>> & map, unsigned int x, 
 	return (0);
 }*/
 
+void add_grass_border(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y)
+{
+	
+	if ((y + 1 < HEIGHT_MAP && map[x][y + 1].getType() == "grass") && (x + 1 < WIDTH_MAP && map[x + 1][y].getType() == "grass"))
+	{
+		map[x][y].addDecors(img_array[GRASS][7]);
+		return ;
+	}
+	else if ((y + 1 < HEIGHT_MAP && map[x][y + 1].getType() == "grass") && (x != 0 && map[x - 1][y].getType() == "grass"))
+	{
+		map[x][y].addDecors(img_array[GRASS][5]);
+		return ;
+	}
+	else if ((y != 0 && map[x][y - 1].getType() == "grass") && (x + 1 < WIDTH_MAP && map[x + 1][y].getType() == "grass"))
+	{
+		map[x][y].addDecors(img_array[GRASS][11]);
+		return ;
+	}
+	else if ((y != 0 && map[x][y - 1].getType() == "grass") && (x != 0 && map[x - 1][y].getType() == "grass"))
+	{
+		map[x][y].addDecors(img_array[GRASS][9]);
+		return ;
+	}
+	else if ((y != 0 && map[x][y - 1].getType() == "grass"))
+	{
+		map[x][y].addDecors(img_array[GRASS][3]);
+		return ;
+	}
+	else if ((x + 1 < WIDTH_MAP && map[x + 1][y].getType() == "grass"))
+	{
+		map[x][y].addDecors(img_array[GRASS][2]);
+		return ;
+	}
+	else if ((x != 0 && map[x - 1][y].getType() == "grass"))
+	{
+		map[x][y].addDecors(img_array[GRASS][1]);
+		return ;
+	}
+	else if ((y + 1 < HEIGHT_MAP && map[x][y + 1].getType() == "grass"))
+	{
+		map[x][y].addDecors(img_array[GRASS][4]);
+		return ;
+	}
+	else if ((x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getType() == "grass"))
+	{
+		map[x][y].addDecors(img_array[GRASS][10]);
+		return ;
+	}
+	else if ((x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getType() == "grass"))
+	{
+		map[x][y].addDecors(img_array[GRASS][12]);
+		return ;
+	}
+		else if ((x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getType() == "grass"))
+	{
+		map[x][y].addDecors(img_array[GRASS][6]);
+		return ;
+	}
+		else if ((x != 0 && y != 0 && map[x - 1][y - 1].getType() == "grass"))
+	{
+		map[x][y].addDecors(img_array[GRASS][8]);
+		return ;
+	}
+}
+
 static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y)
 {
 	if (map[x][y].getImg() != NULL)
@@ -264,6 +329,8 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 				map[x][y].setImg(img_array[typebis][19 + 3]);
 				return ;
 			}
+			if (type == SAND)
+				add_grass_border(map, img_array, x, y);
 			if (need_a_wall == 1)
 			{
 			//std::cout << "Enter reverse corner" << std::endl;
@@ -282,6 +349,7 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 				map[x][y].setImg(img_array[typebis][19 + 9]); // 6
 				return ;
 			}	
+			/*
 			else if ((x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() < map[x][y].getZ()) && // superieur droit 
 						(x + 1 < WIDTH_MAP && map[x + 1][y].getZ() == map[x][y].getZ()) &&
 						(y != 0 && map[x][y - 1].getZ() == map[x][y].getZ()))
@@ -295,19 +363,18 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 			{
 				//map[x][y].setImg(img_array[typebis][4 + WALL * 6]); // 4
 				//return ;
-			}
+			}*/
 			
 		
 			}
-
-			
-					
-		break;
 		
 		default:
 			break;
 		}
 	}
+	if (type == SAND)
+		add_grass_border(map, img_array, x, y);
+
 }
 
 
@@ -348,24 +415,24 @@ static void add_big_wall(std::vector <std::vector <CaseMap>> & map, std::vector<
 		{
 			if (vertical_move(map, x, y - 2, map[x][y - 1].getZ(), 0))
 			{
-				if (x != 0 && map[x - 1][y - 1].getZ() < map[x][y - 1].getZ() - 1)
+				if (x != 0 && map[x - 1][y - 1].getZ() < map[x][y - 1].getZ() - 0.5)
 					map[x][y - 1].setImg(img_array[WALL][1]);
-				else if (x + 1 < WIDTH_MAP && map[x + 1][y - 1].getZ() < map[x][y - 1].getZ() - 1)
+				else if (x + 1 < WIDTH_MAP && map[x + 1][y - 1].getZ() < map[x][y - 1].getZ() - 0.5)
 					map[x][y - 1].setImg(img_array[WALL][2]);
 				else
 					map[x][y - 1].setImg(img_array[WALL][0]);
 				map[x][y - 1].setType("wall");
-				map[x][y - 1].setZ(1);
+				map[x][y - 1].setZ(1.5);
 				
 				vertical_move(map, x, y - 3, map[x][y - 1].getZ(), 0);
-				if (x != 0 && map[x - 1][y - 2].getZ() < map[x][y - 2].getZ() - 1)
+				if (x != 0 && map[x - 1][y - 2].getZ() < map[x][y - 2].getZ() - 0.5)
 					map[x][y - 2].setImg(img_array[WALL][1]);
-				else if (x + 1 < WIDTH_MAP && map[x + 1][y - 2].getZ() < map[x][y - 2].getZ() - 1)
+				else if (x + 1 < WIDTH_MAP && map[x + 1][y - 2].getZ() < map[x][y - 2].getZ() - 0.5)
 					map[x][y - 2].setImg(img_array[WALL][2]);
 				else
 					map[x][y - 2].setImg(img_array[WALL][0]);
 				map[x][y - 2].setType("wall");
-				map[x][y - 2].setZ(1);
+				map[x][y - 2].setZ(1.5);
 			}
 			else
 			{

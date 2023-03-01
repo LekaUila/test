@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:48:28 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/01 16:16:16 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/01 19:11:56 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,19 +103,57 @@ std::vector< std::vector<sf::Texture>> create_array_texture(void)
 			{
 				if (j != 3)			// changer le contenue de cette condition
 				{
-					texture1.loadFromFile("../img/sol/" + type_tab[i]+ "_" + type_tab[j] + "_v.png");
-					texture2.loadFromFile("../img/sol/" + type_tab[i]+ "_" + type_tab[j] + "_h.png");
-                	lst.push_back(texture1);
-                	lst.push_back(texture2);
-					for (size_t g = 0; g < 2; g++)
+					if (i == 2)
 					{
-						for (size_t h = 0; h < 2; h++)
+						if (j == 1)
 						{
-                	        sf::Texture texture3;
-							texture3.loadFromFile("../img/sol/" + type_tab[i] + hight_tab[g] + width_tab[h] + "_" + type_tab[j] + ".png");
-                 	       lst.push_back(texture3);
+							sf::Texture texture3;
+          			  		sf::Texture texture4;
+							texture1.loadFromFile("../img/sol/grass_transparent/grass_left.png");
+							texture2.loadFromFile("../img/sol/grass_transparent/grass_right.png");
+							texture3.loadFromFile("../img/sol/grass_transparent/grass_top.png");
+							texture4.loadFromFile("../img/sol/grass_transparent/grass_bottom.png");
+                			lst.push_back(texture1);
+                			lst.push_back(texture2);
+                			lst.push_back(texture3);
+                			lst.push_back(texture4);
+							for (size_t g = 0; g < 2; g++)
+							{
+								for (size_t h = 0; h < 2; h++)
+								{
+                	  	 	   		sf::Texture texture5;
+									sf::Texture texture6;
+									texture5.loadFromFile("../img/sol/grass_transparent/grass" + hight_tab[g] + width_tab[h] + ".png");
+                 	  	  	  		lst.push_back(texture5);
+									texture6.loadFromFile("../img/sol/grass_transparent/grass" + hight_tab[g] + width_tab[h] + "_reverse.png");
+                 	  	    		lst.push_back(texture6);
+								}
+							}
+						}
+						else
+						{
+							
+						}
+
+					}
+					else
+					{
+						//texture1.loadFromFile("../img/sol/" + type_tab[i]+ "_" + type_tab[j] + "_v.png");
+						//texture2.loadFromFile("../img/sol/" + type_tab[i]+ "_" + type_tab[j] + "_h.png");
+                		lst.push_back(texture1);
+                		lst.push_back(texture2);
+						for (size_t g = 0; g < 2; g++)
+						{
+							for (size_t h = 0; h < 2; h++)
+							{
+                	  	      sf::Texture texture3;
+								//texture3.loadFromFile("../img/sol/" + type_tab[i] + hight_tab[g] + width_tab[h] + "_" + type_tab[j] + ".png");
+                 	  	     lst.push_back(texture3);
+							}
 						}
 					}
+
+
 				}
 				else
 				{
@@ -151,8 +189,8 @@ std::vector< std::vector<sf::Texture>> create_array_texture(void)
 			}
 			else
 			{
-				texture1.loadFromFile("../img/sol/" + type_tab[i] + ".png");
-				texture2.loadFromFile("../img/sol/" + type_tab[i] + ".png");
+				//texture1.loadFromFile("../img/sol/" + type_tab[i] + ".png");
+				//texture2.loadFromFile("../img/sol/" + type_tab[i] + ".png");
                 lst.push_back(texture1);
                 lst.push_back(texture2);
 				for (size_t g = 0; g < 2; g++)
@@ -160,7 +198,7 @@ std::vector< std::vector<sf::Texture>> create_array_texture(void)
 					for (size_t h = 0; h < 2; h++)
 					{
                         sf::Texture texture3;
-						texture3.loadFromFile("../img/sol/" + type_tab[i] + ".png");
+						//texture3.loadFromFile("../img/sol/" + type_tab[i] + ".png");
                         lst.push_back(texture3);
 					}
 				}	

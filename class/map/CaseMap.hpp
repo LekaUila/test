@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:06:41 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/01 16:49:14 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/01 19:04:43 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <SFML/Graphics.hpp>
 # include <iostream>
 # include <string>
+# include <vector>
 class CaseMap 
 {
 private:
@@ -25,6 +26,7 @@ private:
 	float	z;
 	std::string		type;
 	sf::Sprite		*img = NULL;
+	std::vector<sf::Sprite *>		decors_add;
 
 protected:
 
@@ -49,6 +51,7 @@ public:
 	sf::Sprite * getImg() const;
 	void setImg(sf::Sprite &img);
 	void draw(sf::RenderWindow & window, unsigned int xadd, unsigned int yadd);
+	void addDecors(sf::Sprite &sp);
 
 
  

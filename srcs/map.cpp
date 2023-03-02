@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:00:59 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/02 14:47:11 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/02 18:56:35 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -383,16 +383,20 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 }
 
 
-static void vertical_decr(std::vector <std::vector <CaseMap>> & map, unsigned int x, unsigned int y, float z )
+static void vertical_decr(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y, float z )
 {
 	if (y != 0 && map[x][y].getZ() == z)
 	{
-		vertical_decr(map, x, y - 1, z);
+		vertical_decr(map, img_array, x, y - 1, z);
 		map[x][y].setZ(z - 1);
 	}
 	else if (y == 0 && map[x][y].getZ() == z)
 	{
 		map[x][y].setZ(z - 1);
+	}
+	if (x != 0 && map[x - 1][y].getZ() == 1.5 && map[x - 1][y + 1].getZ() == 1.5)
+	{
+		map[x - 1][y].setImg(img_array[WALL][2]);
 	}
 }
 
@@ -441,7 +445,7 @@ static void add_big_wall(std::vector <std::vector <CaseMap>> & map, std::vector<
 			}
 			else
 			{
-				vertical_decr(map, x, y - 1, map[x][y - 1].getZ());
+				vertical_decr(map, img_array, x, y - 1, map[x][y - 1].getZ());
 			}
 
 		}
@@ -511,8 +515,20 @@ static void	recursive_generating(std::vector <std::vector <CaseMap>> & map,  uns
 
 static void add_shadow(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y)
 {
+	/*spe 1*/
+	if (x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() > map[x + 1][y + 1].getZ() && 
+		map[x][y].getZ() > map[x + 1][y + 1].getZ() && map[x + 1][y].getZ() > map[x + 1][y + 1].getZ() && map[x][y].getZ() == map[x + 1][y].getZ())
+	{
+		map[x + 1][y].addDecors(img_array[SHADOW][2]);
+	}
+	/*spe 2*/
+	else if (x + 1 < WIDTH_MAP && y != 0  && map[x][y].getZ() > map[x + 1][y].getZ() && 
+		map[x][y - 1].getZ() > map[x + 1][y].getZ() && map[x + 1][y - 1].getZ() > map[x + 1][y].getZ() && map[x][y - 1].getZ() == map[x + 1][y - 1].getZ())
+	{
+		map[x + 1][y].addDecors(img_array[SHADOW][3]);
+	}
 	/*  triangle bas*/
-	if (x + 2 < WIDTH_MAP && (map[x][y].getImg() == &img_array[SAND][21] || map[x][y].getImg() == &img_array[GRASS][21]))
+	else if (x + 2 < WIDTH_MAP && (map[x][y].getImg() == &img_array[SAND][21] || map[x][y].getImg() == &img_array[GRASS][21]))
 	{
 		map[x + 1][y].addDecors(img_array[SHADOW][1]);
 		if (y != 0 && map[x][y - 1].getZ() > map[x + 1][y].getZ() + 1)
@@ -529,7 +545,7 @@ static void add_shadow(std::vector <std::vector <CaseMap>> & map, std::vector< s
 		}
 		else
 			map[x + 1][y - 1].addDecors(img_array[SHADOW][4]);
-		if (x + 2 < WIDTH_MAP && y != 0 && map[x][y].getZ() > map[x][y - 1].getZ() + 1)
+		if (x + 2 < WIDTH_MAP && y != 0 && map[x][y].getZ() > map[x][y - 1].getZ() + 1 && map[x][y].getZ() > map[x + 2][y - 2].getZ() + 1)
 		{
 			map[x + 2][y - 2].addDecors(img_array[SHADOW][4]);
 		}
@@ -555,25 +571,76 @@ static void add_shadow(std::vector <std::vector <CaseMap>> & map, std::vector< s
 		map[x][y].getImg() == &img_array[SAND][27] || map[x][y].getImg() == &img_array[GRASS][27] || 
 		map[x][y].getImg() == &img_array[SAND][29] || map[x][y].getImg() == &img_array[GRASS][29]))
 	{
-		map[x + 1][y].addDecors(img_array[SHADOW][0]);
+		if (map[x][y].getImg() == &img_array[WALL][2] && map[x + 1][y].getZ() == 1)
+			map[x + 1][y].addDecors(img_array[SHADOW][1]);
+		else
+			map[x + 1][y].addDecors(img_array[SHADOW][0]);
 		if (y != 0 && map[x][y].getZ() > map[x + 1][y].getZ() + 1)
 		{
-			map[x + 2][y - 1].addDecors(img_array[SHADOW][0]);
+			if (y != 1 && (map[x + 2][y - 1].getZ() < map[x + 2][y - 2].getZ() ))
+			{
+				map[x + 2][y - 1].addDecors(img_array[SHADOW][3]);
+			}
+			else if (y != 1 && (map[x + 2][y].getZ() < map[x + 2][y - 1].getZ() ))
+			{
+				map[x + 2][y - 1].addDecors(img_array[SHADOW][2]);
+			}
+			else
+				map[x + 2][y - 1].addDecors(img_array[SHADOW][0]);
 		}
 	}
 	/*top*/
-	else if(x + 2 < WIDTH_MAP && y != 0 &&  (map[x][y].getImg() == &img_array[SAND][25] || map[x][y].getImg() == &img_array[GRASS][25]))
+	else if(x + 1 < WIDTH_MAP && y != 0 &&  (map[x][y].getImg() == &img_array[SAND][25] || map[x][y].getImg() == &img_array[GRASS][25]))
 	{
 		if (map[x][y].getZ() > map[x + 1][y - 1].getZ())
 		{
 			map[x + 1][y - 1].addDecors(img_array[SHADOW][0]);
-			if (x + 3 < WIDTH_MAP && map[x][y].getZ() > map[x][y - 1].getZ() + 1 && map[x + 2][y - 2].getZ() < map[x][y].getZ() - 1)
+			if (x + 2 < WIDTH_MAP && map[x][y].getZ() > map[x][y - 1].getZ() + 1 && map[x + 2][y - 2].getZ() < map[x][y].getZ() - 1)
 			{
 				map[x + 2][y - 2].addDecors(img_array[SHADOW][0]);
 			}
 		}
 	}
 
+}
+
+static void	generate_water(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y, unsigned int max)
+{
+	if (x >= WIDTH_MAP || y >= HEIGHT_MAP || map[x][y].getType() != "grass" || std::rand() % 50 <= PROPAGATION || !max)
+	{
+		return ;
+	}
+	int check = (x != 0 && (map[x - 1][y].getType() == "grass" || map[x - 1][y].getType() == "water") && map[x - 1][y].getZ() == map[x][y].getZ());
+	check += (y != 0 && (map[x][y - 1].getType() == "grass" || map[x][y - 1].getType() == "water") && map[x][y - 1].getZ() == map[x][y].getZ());
+	check += (y + 2 < HEIGHT_MAP && (map[x][y + 2].getType() == "grass" || map[x][y + 2].getType() == "water") && map[x][y + 2].getZ() == map[x][y].getZ());
+	check += (x + 2 < WIDTH_MAP && (map[x + 2][y].getType() == "grass" || map[x + 2][y].getType() == "water") && map[x + 2][y].getZ() == map[x][y].getZ());
+	check += (x + 2 < WIDTH_MAP && (map[x + 2][y + 1].getType() == "grass" || map[x + 2][y + 1].getType() == "water"));
+	check += (x != 0 && (map[x - 2][y + 1].getType() == "grass" || map[x - 2][y + 1].getType() == "water"));
+
+	if (check == 6)
+	{
+		map[x][y].setImg(img_array[WATER][0]);
+		map[x + 1][y].setImg(img_array[WATER][0]);
+		map[x][y + 1].setImg(img_array[WATER][0]);
+		map[x + 1][y + 1].setImg(img_array[WATER][0]);
+		map[x][y].setType("water");
+		map[x + 1][y].setType("water");
+		map[x][y + 1].setType("water");
+		map[x + 1][y + 1].setType("water");
+		generate_water(map, img_array, x - 2, y, max - 1);
+		generate_water(map, img_array, x + 2, y, max - 1);
+		generate_water(map, img_array, x, y - 2, max - 1);
+		generate_water(map, img_array, x, y + 2, max - 1);
+	}
+}
+
+
+static void change_water_border(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y)
+{
+		if (map[x][y - 1].getType() == "grass")
+		{
+			map[x][y].setImg(img_array[WATER][7]);
+		}
 }
 
 std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Sprite>> & img_array)
@@ -673,10 +740,25 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 		}
 	}
 
+	for (size_t i = 0; i < RANDOM_LEVEL; i++) /* (WIDTH_MAP * HEIGHT_MAP) / 1000*/
+	{
+
+		int x = 3;
+		int y = 3;
+		while (x % 2 != 0 || y % 2 != 0 )
+		{
+			x = std::rand() % (WIDTH_MAP - 1);
+			y = std::rand() % (HEIGHT_MAP - 1);
+		}
+		generate_water(map, img_array, x , y, 15);
+	}
+
 	for (size_t y = 0; y < HEIGHT_MAP; y++)
 	{
 		for (size_t x = 0; x < WIDTH_MAP; x++)
 		{
+			if (map[x][y].getType() == "water")
+				change_water_border(map, img_array, x, y);
 			if (map[x][y].getType() == "sand")
 				add_grass_border(map, img_array, x, y);
 		}

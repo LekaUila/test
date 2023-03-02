@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:48:28 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/02 13:05:05 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/02 17:35:33 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,27 @@ std::vector< std::vector<sf::Texture>> create_array_texture(void)
 						}
 
 					}
+					else if (i == 0 && j == 1)
+					{
+						sf::Texture texture1w;
+						sf::Texture texture2w;
+						sf::Texture texture3w;
+						sf::Texture texture4w;
+						sf::Texture texture5w;
+						sf::Texture texture6w;
+						texture1w.loadFromFile("../img/sol/water/water_grass.png");
+						texture2w.loadFromFile("../img/sol/water/water_grass_left.png");
+						texture3w.loadFromFile("../img/sol/water/water_grass_right.png");
+						texture4w.loadFromFile("../img/sol/water/water_wall.png");
+						texture5w.loadFromFile("../img/sol/water/water_wall_left.png");
+						texture6w.loadFromFile("../img/sol/water/water_wall_right.png");
+						lst.push_back(texture1w);
+						lst.push_back(texture2w);
+						lst.push_back(texture3w);
+						lst.push_back(texture4w);
+						lst.push_back(texture5w);
+						lst.push_back(texture6w);
+					}
 					else
 					{
 						//texture1.loadFromFile("../img/sol/" + type_tab[i]+ "_" + type_tab[j] + "_v.png");
@@ -154,6 +175,22 @@ std::vector< std::vector<sf::Texture>> create_array_texture(void)
 					}
 
 
+				}
+				else if (i == 0) 
+				{
+					sf::Texture texture1w;
+					texture1w.loadFromFile("../img/waterfall/waterfall.png");
+					lst.push_back(texture1w);
+					std::string	str_nb_tab[4] = {"1", "2", "3", "4"};
+					for (size_t h = 0; h < 4; h++)
+					{
+						sf::Texture texture2w;
+						sf::Texture texture3w;
+						texture2w.loadFromFile("../img/waterfall/waterfall_top" + str_nb_tab[h] + ".png");
+						texture3w.loadFromFile("../img/waterfall/waterfall_bottom" + str_nb_tab[h] + ".png");
+						lst.push_back(texture2w);
+						lst.push_back(texture3w);
+					}
 				}
 				else
 				{

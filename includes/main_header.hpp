@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:49:47 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/02 14:27:22 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/02 18:41:03 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # define WIDTH_WIN 800
 # define HEIGHT_WIN 800
 # define MOVE_SPEED 1
-# define PROPAGATION 1
+# define PROPAGATION 5
 
 enum e_type 
 {

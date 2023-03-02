@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:00:59 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/01 20:05:29 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/02 14:47:11 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static	void print_map(std::vector <std::vector <CaseMap>> & map)
 
 	for (size_t x = 0; x < WIDTH_MAP; x++)
 	{
-		std::cout << x << " ";
+		std::cout << x << "  ";
 		if (x < 10)
 			std::cout << " ";
 	}
@@ -42,16 +42,16 @@ static	void print_map(std::vector <std::vector <CaseMap>> & map)
 					switch (i)
 					{
 					case 0:
-						std::cout << "~  ";
+						std::cout << "~   ";
 						break;
 					case 1:
-						std::cout << "=  ";
+						std::cout << "=   ";
 						break;
 					case 2:
-						std::cout << "#  ";
+						std::cout << "#   ";
 						break;				
 					default:
-						std::cout << "@  ";
+						std::cout << "@   ";
 						break;
 					}
 				}
@@ -69,7 +69,7 @@ static	void print_map(std::vector <std::vector <CaseMap>> & map)
 
 	for (size_t x = 0; x < WIDTH_MAP; x++)
 	{
-		std::cout << x << " ";
+		std::cout << x << "  ";
 		if (x < 10)
 			std::cout << " ";
 	}
@@ -80,9 +80,13 @@ static	void print_map(std::vector <std::vector <CaseMap>> & map)
 		for (size_t x = 0; x < WIDTH_MAP; x++)
 		{
 			if (map[x][y].getZ() != 1000)
-				std::cout << map[x][y].getZ() << "  ";
+			{
+				std::cout << map[x][y].getZ() << " ";
+				if (map[x][y].getZ() != 1.5)
+					std::cout  << "  ";
+			}
 			else
-				std::cout  << "   ";
+				std::cout  << "    ";
 		}
 		std::cout << " " << y  << std::endl;
 		std::cout << std::endl;
@@ -154,62 +158,74 @@ static	int smoothing(std::vector <std::vector <CaseMap>> & map, unsigned int x, 
 void add_grass_border(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y)
 {
 	
-	if ((y + 1 < HEIGHT_MAP && map[x][y + 1].getType() == "grass") && (x + 1 < WIDTH_MAP && map[x + 1][y].getType() == "grass"))
+	if ((y + 1 < HEIGHT_MAP && map[x][y + 1].getType() == "grass") && (x + 1 < WIDTH_MAP && map[x + 1][y].getType() == "grass") && 
+		map[x + 1][y].getZ() == map[x][y].getZ() && map[x][y + 1].getZ() == map[x][y].getZ())
 	{
 		map[x][y].addDecors(img_array[GRASS][7]);
 		return ;
 	}
-	else if ((y + 1 < HEIGHT_MAP && map[x][y + 1].getType() == "grass") && (x != 0 && map[x - 1][y].getType() == "grass"))
+	else if ((y + 1 < HEIGHT_MAP && map[x][y + 1].getType() == "grass") && (x != 0 && map[x - 1][y].getType() == "grass") && 
+		map[x - 1][y].getZ() == map[x][y].getZ() && map[x][y + 1].getZ() == map[x][y].getZ())
 	{
 		map[x][y].addDecors(img_array[GRASS][5]);
 		return ;
 	}
-	else if ((y != 0 && map[x][y - 1].getType() == "grass") && (x + 1 < WIDTH_MAP && map[x + 1][y].getType() == "grass"))
+	else if ((y != 0 && map[x][y - 1].getType() == "grass") && (x + 1 < WIDTH_MAP && map[x + 1][y].getType() == "grass") && 
+		map[x + 1][y].getZ() == map[x][y].getZ() && map[x][y - 1].getZ() == map[x][y].getZ())
 	{
 		map[x][y].addDecors(img_array[GRASS][11]);
 		return ;
 	}
-	else if ((y != 0 && map[x][y - 1].getType() == "grass") && (x != 0 && map[x - 1][y].getType() == "grass"))
+	else if ((y != 0 && map[x][y - 1].getType() == "grass") && (x != 0 && map[x - 1][y].getType() == "grass") && 
+		map[x - 1][y].getZ() == map[x][y].getZ() && map[x][y - 1].getZ() == map[x][y].getZ())
 	{
 		map[x][y].addDecors(img_array[GRASS][9]);
 		return ;
 	}
-	else if ((y != 0 && map[x][y - 1].getType() == "grass"))
+	else if ((y != 0 && map[x][y - 1].getType() == "grass") && 
+		map[x][y - 1].getZ() == map[x][y].getZ())
 	{
 		map[x][y].addDecors(img_array[GRASS][3]);
 		return ;
 	}
-	else if ((x + 1 < WIDTH_MAP && map[x + 1][y].getType() == "grass"))
+	else if ((x + 1 < WIDTH_MAP && map[x + 1][y].getType() == "grass") && 
+		map[x + 1][y].getZ() == map[x][y].getZ())
 	{
 		map[x][y].addDecors(img_array[GRASS][2]);
 		return ;
 	}
-	else if ((x != 0 && map[x - 1][y].getType() == "grass"))
+	else if ((x != 0 && map[x - 1][y].getType() == "grass") && 
+		map[x - 1][y].getZ() == map[x][y].getZ())
 	{
 		map[x][y].addDecors(img_array[GRASS][1]);
 		return ;
 	}
-	else if ((y + 1 < HEIGHT_MAP && map[x][y + 1].getType() == "grass"))
+	else if ((y + 1 < HEIGHT_MAP && map[x][y + 1].getType() == "grass") && 
+		map[x][y + 1].getZ() == map[x][y].getZ())
 	{
 		map[x][y].addDecors(img_array[GRASS][4]);
 		return ;
 	}
-	else if ((x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getType() == "grass"))
+	else if ((x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getType() == "grass") && 
+		map[x + 1][y + 1].getZ() == map[x][y].getZ())
 	{
 		map[x][y].addDecors(img_array[GRASS][10]);
 		return ;
 	}
-	else if ((x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getType() == "grass"))
+	else if ((x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getType() == "grass") && 
+		map[x - 1][y + 1].getZ() == map[x][y].getZ())
 	{
 		map[x][y].addDecors(img_array[GRASS][12]);
 		return ;
 	}
-		else if ((x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getType() == "grass"))
+	else if ((x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getType() == "grass") && 
+		map[x + 1][y - 1].getZ() == map[x][y].getZ())
 	{
 		map[x][y].addDecors(img_array[GRASS][6]);
 		return ;
 	}
-		else if ((x != 0 && y != 0 && map[x - 1][y - 1].getType() == "grass"))
+	else if ((x != 0 && y != 0 && map[x - 1][y - 1].getType() == "grass") && 
+		map[x - 1][y - 1].getZ() == map[x][y].getZ())
 	{
 		map[x][y].addDecors(img_array[GRASS][8]);
 		return ;
@@ -263,6 +279,7 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 					(x + 1 < WIDTH_MAP && map[x + 1][y].getZ() < map[x][y].getZ()))
 			{
 				map[x][y].setImg(img_array[typebis][19 + 5]); // 4
+				map[x][y].setType("wall");
 				return ;
 			}
 			else if (/*(x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getZ() < map[x][y].getZ()) && *//* inferieur gauche */
@@ -270,6 +287,7 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 						(y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() < map[x][y].getZ()))
 			{
 				map[x][y].setImg(img_array[typebis][19 + 4]); // 3
+				map[x][y].setType("wall");
 				return ;
 			}
 			else if (/*(x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() < map[x][y].getZ()) &&*/ /* superieur droit */
@@ -290,15 +308,21 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 
 		case 2:
 			if ((x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() > map[x][y].getZ()) && /* superieur droit */
-						(y != 0 && map[x][y - 1].getZ() != map[x][y].getZ()) && need_a_wall == 2)
+						(y != 0 && map[x][y - 1].getZ() != map[x][y].getZ()) &&
+						(x != 0 && y != 0 && (int)map[x - 1][y - 1].getZ() != (int)map[x][y - 1].getZ()) &&
+						(x != 0 && map[x - 1][y].getZ() <= map[x][y].getZ()))
 			{
 				map[x][y].setImg(img_array[typebis][19 + 1]); // 6
+				map[x][y].setType("wall");
 				return ;
 			}
 			else if ((x != 0 && y != 0 && map[x - 1][y - 1].getZ() > map[x][y].getZ()) && /* superieur gauche */
-						(y != 0 && map[x][y - 1].getZ() != map[x][y].getZ()) && need_a_wall == 2) 
+						(y != 0 && map[x][y - 1].getZ() != map[x][y].getZ()) && 
+						(x + 1 < WIDTH_MAP && y != 0 && (int)map[x + 1][y - 1].getZ() != (int)map[x][y - 1].getZ()) &&
+						(x + 1 < WIDTH_MAP &&  map[x + 1][y].getZ() <= map[x][y].getZ()))
 			{
 				map[x][y].setImg(img_array[typebis][19 + 2]); // 5
+				map[x][y].setType("wall");
 				return ;
 			}
 
@@ -322,59 +346,40 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 			else if ((y != 0 && map[x][y - 1].getZ() > map[x][y].getZ()))
 			{
 				map[x][y].setImg(img_array[typebis][19]);
+				map[x][y].setType("wall");
 				return ;
 			}
 			else if ((y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() < map[x][y].getZ()))
 			{
 				map[x][y].setImg(img_array[typebis][19 + 3]);
+				map[x][y].setType("wall");
 				return ;
 			}
-			if (type == SAND)
-				add_grass_border(map, img_array, x, y);
 			if (need_a_wall == 1)
 			{
 			//std::cout << "Enter reverse corner" << std::endl;
 			
-			if ((x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getZ() < map[x][y].getZ()) /*&& // inferieur droit 
-					(y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() == map[x][y].getZ()) && 
-					(x + 1 < WIDTH_MAP && map[x + 1][y].getZ() == map[x][y].getZ())*/)
-			{
-				map[x][y].setImg(img_array[typebis][19 + 10]); // 5
-				return ;
-			}	
-			else if ((x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getZ() < map[x][y].getZ()) /*&& // inferieur gauche 
-						(x != 0 && map[x - 1][y].getZ() == map[x][y].getZ()) &&
-						(y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() == map[x][y].getZ())*/)
-			{
-				map[x][y].setImg(img_array[typebis][19 + 9]); // 6
-				return ;
-			}	
-			/*
-			else if ((x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() < map[x][y].getZ()) && // superieur droit 
-						(x + 1 < WIDTH_MAP && map[x + 1][y].getZ() == map[x][y].getZ()) &&
-						(y != 0 && map[x][y - 1].getZ() == map[x][y].getZ()))
-			{
-				//map[x][y].setImg(img_array[typebis][3 + WALL * 6]); // 3
-				//return ;
+				if ((x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getZ() < map[x][y].getZ()) /*&& // inferieur droit 
+						(y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() == map[x][y].getZ()) && 
+						(x + 1 < WIDTH_MAP && map[x + 1][y].getZ() == map[x][y].getZ())*/)
+				{
+					map[x][y].setImg(img_array[typebis][19 + 10]); // 5
+					return ;
+				}	
+				else if ((x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getZ() < map[x][y].getZ()) /*&& // inferieur gauche 
+							(x != 0 && map[x - 1][y].getZ() == map[x][y].getZ()) &&
+							(y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() == map[x][y].getZ())*/)
+				{
+					map[x][y].setImg(img_array[typebis][19 + 9]); // 6
+					return ;
+				}
 			}
-			else if ((x != 0 && y != 0 && map[x - 1][y - 1].getZ() < map[x][y].getZ()) && // superieur gauche 
-						(x != 0 && map[x - 1][y].getZ() == map[x][y].getZ()) &&
-						(y != 0 && map[x][y - 1].getZ() == map[x][y].getZ())) 
-			{
-				//map[x][y].setImg(img_array[typebis][4 + WALL * 6]); // 4
-				//return ;
-			}*/
-			
-		
-			}
+			break;
 		
 		default:
 			break;
 		}
 	}
-	if (type == SAND)
-		add_grass_border(map, img_array, x, y);
-
 }
 
 
@@ -483,7 +488,7 @@ static unsigned int	getMyZ(std::vector <std::vector <CaseMap>> & map,  unsigned 
 
 static void	recursive_generating(std::vector <std::vector <CaseMap>> & map,  unsigned int x, unsigned int y, unsigned int max, int force)
 {
-	if ( x < WIDTH_MAP && x + 1 < WIDTH_MAP  && y < HEIGHT_MAP && y + 1 < HEIGHT_MAP &&  max && (force || std::rand() % 50 > 30) && map[x][y].getType() == "none")
+	if ( x < WIDTH_MAP && x + 1 < WIDTH_MAP  && y < HEIGHT_MAP && y + 1 < HEIGHT_MAP &&  max && (force || std::rand() % 50 > PROPAGATION) && map[x][y].getType() == "none")
 	{
 		std::string type = getMyType(map, x, y);
 		int			z    = getMyZ(map, x, y);
@@ -502,6 +507,73 @@ static void	recursive_generating(std::vector <std::vector <CaseMap>> & map,  uns
 		int			z    = getMyZ(map, x, y);
 		map[x][y] = CaseMap(x, y, z, type);
 	}
+}
+
+static void add_shadow(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y)
+{
+	/*  triangle bas*/
+	if (x + 2 < WIDTH_MAP && (map[x][y].getImg() == &img_array[SAND][21] || map[x][y].getImg() == &img_array[GRASS][21]))
+	{
+		map[x + 1][y].addDecors(img_array[SHADOW][1]);
+		if (y != 0 && map[x][y - 1].getZ() > map[x + 1][y].getZ() + 1)
+		{
+			map[x + 2][y - 1].addDecors(img_array[SHADOW][1]);
+		}
+	}
+	/*  triangle haut*/
+	else if (x + 1 < WIDTH_MAP && y != 0 && (map[x][y].getImg() == &img_array[SAND][26] || map[x][y].getImg() == &img_array[GRASS][26]))
+	{
+		if (x != 0 && map[x - 1][y].getZ() > map[x][y].getZ() - 2 && map[x][y - 1].getZ() <= map[x][y].getZ() - 2)
+		{
+			map[x + 1][y - 1].addDecors(img_array[SHADOW][0]);
+		}
+		else
+			map[x + 1][y - 1].addDecors(img_array[SHADOW][4]);
+		if (x + 2 < WIDTH_MAP && y != 0 && map[x][y].getZ() > map[x][y - 1].getZ() + 1)
+		{
+			map[x + 2][y - 2].addDecors(img_array[SHADOW][4]);
+		}
+	}
+	/*corner*/
+	else if(x + 1 < WIDTH_MAP && y != 0 &&  (map[x][y].getImg() == &img_array[SAND][27] || map[x][y].getImg() == &img_array[GRASS][27]))
+	{
+		map[x + 1][y - 1].addDecors(img_array[SHADOW][0]);
+		map[x + 1][y].addDecors(img_array[SHADOW][0]);
+		//map[x][y - 1].addDecors(img_array[SHADOW][0]);
+		if (y != 0 && map[x][y].getZ() > map[x + 1][y].getZ() + 1)
+		{
+			map[x + 2][y - 1].addDecors(img_array[SHADOW][0]);
+		}
+		if (x + 3 < WIDTH_MAP && map[x][y].getZ() > map[x][y - 1].getZ() + 1 && map[x + 2][y - 2].getZ() < map[x][y].getZ() - 1)
+		{
+			map[x + 2][y - 2].addDecors(img_array[SHADOW][0]);
+		}
+	}
+	/*right*/
+	else if (x + 2 < WIDTH_MAP && (map[x][y].getImg() == &img_array[WALL][2] || 
+		map[x][y].getImg() == &img_array[SAND][24] || map[x][y].getImg() == &img_array[GRASS][24] || 
+		map[x][y].getImg() == &img_array[SAND][27] || map[x][y].getImg() == &img_array[GRASS][27] || 
+		map[x][y].getImg() == &img_array[SAND][29] || map[x][y].getImg() == &img_array[GRASS][29]))
+	{
+		map[x + 1][y].addDecors(img_array[SHADOW][0]);
+		if (y != 0 && map[x][y].getZ() > map[x + 1][y].getZ() + 1)
+		{
+			map[x + 2][y - 1].addDecors(img_array[SHADOW][0]);
+		}
+	}
+	/*top*/
+	else if(x + 2 < WIDTH_MAP && y != 0 &&  (map[x][y].getImg() == &img_array[SAND][25] || map[x][y].getImg() == &img_array[GRASS][25]))
+	{
+		if (map[x][y].getZ() > map[x + 1][y - 1].getZ())
+		{
+			map[x + 1][y - 1].addDecors(img_array[SHADOW][0]);
+			if (x + 3 < WIDTH_MAP && map[x][y].getZ() > map[x][y - 1].getZ() + 1 && map[x + 2][y - 2].getZ() < map[x][y].getZ() - 1)
+			{
+				map[x + 2][y - 2].addDecors(img_array[SHADOW][0]);
+			}
+		}
+	}
+
 }
 
 std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Sprite>> & img_array)
@@ -600,7 +672,25 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 			associate_img(map, img_array, x, y);
 		}
 	}
+
+	for (size_t y = 0; y < HEIGHT_MAP; y++)
+	{
+		for (size_t x = 0; x < WIDTH_MAP; x++)
+		{
+			if (map[x][y].getType() == "sand")
+				add_grass_border(map, img_array, x, y);
+		}
+	}
 	print_map(map);
+
+
+	for (size_t y = 0; y < HEIGHT_MAP; y++)
+	{
+		for (size_t x = 0; x < WIDTH_MAP; x++)
+		{
+			add_shadow(map, img_array, x, y);
+		}
+	}
 	
 	return (map);
 }

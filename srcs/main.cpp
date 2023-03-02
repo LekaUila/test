@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:51:47 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/01 19:14:59 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/02 11:50:40 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int main()
     std::vector< std::vector<sf::Texture>>	img_array = create_array_texture();
 
     std::vector< std::vector<sf::Sprite>>	sprite_array;
-    for (size_t i = 0; i < 4; i++)
+    for (size_t i = 0; i < img_array.size(); i++)
     {
         std::vector<sf::Sprite> lst_sprite;
         for (size_t j = 0; j < img_array[i].size(); j++)

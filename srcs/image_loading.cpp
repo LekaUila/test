@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:48:28 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/01 19:11:56 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/02 13:05:05 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,5 +206,25 @@ std::vector< std::vector<sf::Texture>> create_array_texture(void)
 		}
         img_array.push_back(lst);
 	}
+	{
+		std::vector<sf::Texture> lst_shadow;
+        sf::Texture texture1;
+		sf::Texture texture2;
+		sf::Texture texture3;
+		sf::Texture texture4;
+		sf::Texture texture5;
+		texture1.loadFromFile("../img/shadow/shadow.png");
+		texture2.loadFromFile("../img/shadow/shadow_start.png");
+		texture3.loadFromFile("../img/shadow/shadow_spe1.png");
+		texture4.loadFromFile("../img/shadow/shadow_spe2.png");
+		texture5.loadFromFile("../img/shadow/shadow_start2.png");
+        lst_shadow.push_back(texture1);
+		lst_shadow.push_back(texture2);
+		lst_shadow.push_back(texture3);
+		lst_shadow.push_back(texture4);
+		lst_shadow.push_back(texture5);
+		img_array.push_back(lst_shadow);
+	}
+
 	return (img_array);
 }

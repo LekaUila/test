@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:49:47 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/03 13:12:12 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/03 17:18:53 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@
 # include <vector>
 # include <map>
 # include "../class/map/CaseMap.hpp"
-# define WIDTH_MAP 500
-# define HEIGHT_MAP 500
 # define RANDOM_LEVEL 150
 # define WIDTH_WIN 1600
 # define HEIGHT_WIN 800
+# define WIDTH_MAP 500
+# define HEIGHT_MAP 500
 # define MOVE_SPEED 2.5
 # define PROPAGATION 5
 

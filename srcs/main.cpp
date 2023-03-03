@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:51:47 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/03 15:54:20 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/03 16:50:22 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int main()
         {
             camera[1]-= MOVE_SPEED;
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && camera[1] - (HEIGHT_WIN / 2) + MOVE_SPEED < (HEIGHT_MAP * 32) - (WIDTH_WIN))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && camera[1] - (HEIGHT_WIN / 2) + MOVE_SPEED < (HEIGHT_MAP * 32) - (HEIGHT_WIN))
         {
             camera[1]+= MOVE_SPEED;
         }

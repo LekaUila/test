@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:00:59 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/03 16:00:52 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/03 17:27:57 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -436,7 +436,7 @@ static void add_big_wall(std::vector <std::vector <CaseMap>> & map, std::vector<
 				vertical_move(map, x, y - 3, map[x][y - 1].getZ(), 0);
 				if (x != 0 && map[x - 1][y - 2].getZ() < map[x][y - 2].getZ() - 0.5)
 					map[x][y - 2].setImg(img_array[WALL][1]);
-				else if (x + 1 < WIDTH_MAP && map[x + 1][y - 2].getZ() < map[x][y - 2].getZ() - 0.5)
+				else if (x + 1 < WIDTH_MAP && map[x + 1][y - 2].getZ() < map[x][y - 2].getZ() - 1)
 					map[x][y - 2].setImg(img_array[WALL][2]);
 				else
 					map[x][y - 2].setImg(img_array[WALL][0]);
@@ -567,6 +567,8 @@ static void	generate_water(std::vector <std::vector <CaseMap>> & map, std::vecto
 
 static void change_water_border(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y)
 {
+		//if (x == 0 || x + 2 >= WIDTH_MAP || y == 0 || y + 2 >= HEIGHT_MAP)
+		//	return ;
 		if (map[x][y - 1].getType() == "grass")
 		{
 			if (map[x + 1][y - 1].getType() == "water" && map[x + 1][y].getType() == "water")

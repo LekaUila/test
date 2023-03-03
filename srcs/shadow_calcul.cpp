@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 12:22:47 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/03 16:39:51 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/03 17:31:52 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,10 +147,10 @@ void add_shadow(std::vector <std::vector <CaseMap>> & map, std::vector< std::vec
 		map[x][y].getImg() == &img_array[SAND][27] || map[x][y].getImg() == &img_array[GRASS][27] || 
 		map[x][y].getImg() == &img_array[SAND][29] || map[x][y].getImg() == &img_array[GRASS][29]))
 	{
-		if (map[x][y].getImg() == &img_array[WALL][2] && (map[x + 1][y].getZ() == 1 || map[x][y + 1].getType() == "water"))
+		if (map[x][y].getImg() == &img_array[WALL][2] && (map[x + 1][y].getZ() == 1 || (y + 1 < HEIGHT_MAP && map[x][y + 1].getType() == "water" && map[x][y].getZ() == map[x][y + 1].getZ())))
 		{
 			map[x + 1][y].addDecors(img_array[SHADOW][1]);
-			if (map[x][y - 1].getZ() == 1.5)
+			if (map[x][y + 1].getZ() == 1.5 && map[x + 2][y - 1].getZ() == 0 && map[x + 2][y - 1].getZ() == 0 && map[x + 2][y ].getZ() != 1)
 				map[x + 2][y - 1].addDecors(img_array[SHADOW][1]);
 		}
 		else

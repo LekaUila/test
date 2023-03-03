@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:00:59 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/02 18:56:35 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/03 16:00:52 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -513,102 +513,32 @@ static void	recursive_generating(std::vector <std::vector <CaseMap>> & map,  uns
 	}
 }
 
-static void add_shadow(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y)
-{
-	/*spe 1*/
-	if (x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() > map[x + 1][y + 1].getZ() && 
-		map[x][y].getZ() > map[x + 1][y + 1].getZ() && map[x + 1][y].getZ() > map[x + 1][y + 1].getZ() && map[x][y].getZ() == map[x + 1][y].getZ())
-	{
-		map[x + 1][y].addDecors(img_array[SHADOW][2]);
-	}
-	/*spe 2*/
-	else if (x + 1 < WIDTH_MAP && y != 0  && map[x][y].getZ() > map[x + 1][y].getZ() && 
-		map[x][y - 1].getZ() > map[x + 1][y].getZ() && map[x + 1][y - 1].getZ() > map[x + 1][y].getZ() && map[x][y - 1].getZ() == map[x + 1][y - 1].getZ())
-	{
-		map[x + 1][y].addDecors(img_array[SHADOW][3]);
-	}
-	/*  triangle bas*/
-	else if (x + 2 < WIDTH_MAP && (map[x][y].getImg() == &img_array[SAND][21] || map[x][y].getImg() == &img_array[GRASS][21]))
-	{
-		map[x + 1][y].addDecors(img_array[SHADOW][1]);
-		if (y != 0 && map[x][y - 1].getZ() > map[x + 1][y].getZ() + 1)
-		{
-			map[x + 2][y - 1].addDecors(img_array[SHADOW][1]);
-		}
-	}
-	/*  triangle haut*/
-	else if (x + 1 < WIDTH_MAP && y != 0 && (map[x][y].getImg() == &img_array[SAND][26] || map[x][y].getImg() == &img_array[GRASS][26]))
-	{
-		if (x != 0 && map[x - 1][y].getZ() > map[x][y].getZ() - 2 && map[x][y - 1].getZ() <= map[x][y].getZ() - 2)
-		{
-			map[x + 1][y - 1].addDecors(img_array[SHADOW][0]);
-		}
-		else
-			map[x + 1][y - 1].addDecors(img_array[SHADOW][4]);
-		if (x + 2 < WIDTH_MAP && y != 0 && map[x][y].getZ() > map[x][y - 1].getZ() + 1 && map[x][y].getZ() > map[x + 2][y - 2].getZ() + 1)
-		{
-			map[x + 2][y - 2].addDecors(img_array[SHADOW][4]);
-		}
-	}
-	/*corner*/
-	else if(x + 1 < WIDTH_MAP && y != 0 &&  (map[x][y].getImg() == &img_array[SAND][27] || map[x][y].getImg() == &img_array[GRASS][27]))
-	{
-		map[x + 1][y - 1].addDecors(img_array[SHADOW][0]);
-		map[x + 1][y].addDecors(img_array[SHADOW][0]);
-		//map[x][y - 1].addDecors(img_array[SHADOW][0]);
-		if (y != 0 && map[x][y].getZ() > map[x + 1][y].getZ() + 1)
-		{
-			map[x + 2][y - 1].addDecors(img_array[SHADOW][0]);
-		}
-		if (x + 3 < WIDTH_MAP && map[x][y].getZ() > map[x][y - 1].getZ() + 1 && map[x + 2][y - 2].getZ() < map[x][y].getZ() - 1)
-		{
-			map[x + 2][y - 2].addDecors(img_array[SHADOW][0]);
-		}
-	}
-	/*right*/
-	else if (x + 2 < WIDTH_MAP && (map[x][y].getImg() == &img_array[WALL][2] || 
-		map[x][y].getImg() == &img_array[SAND][24] || map[x][y].getImg() == &img_array[GRASS][24] || 
-		map[x][y].getImg() == &img_array[SAND][27] || map[x][y].getImg() == &img_array[GRASS][27] || 
-		map[x][y].getImg() == &img_array[SAND][29] || map[x][y].getImg() == &img_array[GRASS][29]))
-	{
-		if (map[x][y].getImg() == &img_array[WALL][2] && map[x + 1][y].getZ() == 1)
-			map[x + 1][y].addDecors(img_array[SHADOW][1]);
-		else
-			map[x + 1][y].addDecors(img_array[SHADOW][0]);
-		if (y != 0 && map[x][y].getZ() > map[x + 1][y].getZ() + 1)
-		{
-			if (y != 1 && (map[x + 2][y - 1].getZ() < map[x + 2][y - 2].getZ() ))
-			{
-				map[x + 2][y - 1].addDecors(img_array[SHADOW][3]);
-			}
-			else if (y != 1 && (map[x + 2][y].getZ() < map[x + 2][y - 1].getZ() ))
-			{
-				map[x + 2][y - 1].addDecors(img_array[SHADOW][2]);
-			}
-			else
-				map[x + 2][y - 1].addDecors(img_array[SHADOW][0]);
-		}
-	}
-	/*top*/
-	else if(x + 1 < WIDTH_MAP && y != 0 &&  (map[x][y].getImg() == &img_array[SAND][25] || map[x][y].getImg() == &img_array[GRASS][25]))
-	{
-		if (map[x][y].getZ() > map[x + 1][y - 1].getZ())
-		{
-			map[x + 1][y - 1].addDecors(img_array[SHADOW][0]);
-			if (x + 2 < WIDTH_MAP && map[x][y].getZ() > map[x][y - 1].getZ() + 1 && map[x + 2][y - 2].getZ() < map[x][y].getZ() - 1)
-			{
-				map[x + 2][y - 2].addDecors(img_array[SHADOW][0]);
-			}
-		}
-	}
-
-}
-
 static void	generate_water(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y, unsigned int max)
 {
-	if (x >= WIDTH_MAP || y >= HEIGHT_MAP || map[x][y].getType() != "grass" || std::rand() % 50 <= PROPAGATION || !max)
+	if (x >= WIDTH_MAP || y >= HEIGHT_MAP || (map[x][y].getType() != "grass" && map[x][y].getType() != "wall") || std::rand() % 50 <= PROPAGATION || !max)
 	{
 		return ;
+	}
+	if (map[x][y].getType() == "wall")
+	{
+		int check = 0; //(x != 0 && (map[x - 1][y].getType() == "grass" || map[x - 1][y].getType() == "water") && map[x - 1][y].getZ() == map[x][y].getZ());
+		//check += (y != 0 && (map[x][y - 1].getType() == "grass" || map[x][y - 1].getType() == "water") && map[x][y - 1].getZ() == map[x][y].getZ());
+		check += (y + 2 < HEIGHT_MAP && (map[x][y + 2].getType() == "grass" || map[x][y + 2].getType() == "water") && map[x][y + 2].getZ() == map[x][y].getZ());
+		//check += (x + 2 < WIDTH_MAP && (map[x + 2][y].getType() == "grass" || map[x + 2][y].getType() == "water") && map[x + 2][y].getZ() == map[x][y].getZ());
+		check += (x + 2 < WIDTH_MAP && (map[x + 2][y + 1].getType() == "grass" || map[x + 2][y + 1].getType() == "water"));
+		check += (x != 0 && (map[x - 1][y + 1].getType() == "grass" || map[x - 2][y + 1].getType() == "water"));
+		if (check == 3)
+		{
+			map[x][y + 1].setImg(img_array[WATER][0]);
+			map[x + 1][y + 1].setImg(img_array[WATER][0]);
+			map[x][y + 1].setType("water");
+			map[x + 1][y + 1].setType("water");
+			generate_water(map, img_array, x - 2, y, max - 1);
+			generate_water(map, img_array, x + 2, y, max - 1);
+			//generate_water(map, img_array, x, y - 2, max - 1);
+			generate_water(map, img_array, x, y + 2, max - 1);
+			return ;
+		}
 	}
 	int check = (x != 0 && (map[x - 1][y].getType() == "grass" || map[x - 1][y].getType() == "water") && map[x - 1][y].getZ() == map[x][y].getZ());
 	check += (y != 0 && (map[x][y - 1].getType() == "grass" || map[x][y - 1].getType() == "water") && map[x][y - 1].getZ() == map[x][y].getZ());
@@ -639,7 +569,40 @@ static void change_water_border(std::vector <std::vector <CaseMap>> & map, std::
 {
 		if (map[x][y - 1].getType() == "grass")
 		{
-			map[x][y].setImg(img_array[WATER][7]);
+			if (map[x + 1][y - 1].getType() == "water" && map[x + 1][y].getType() == "water")
+				map[x][y].setImg(img_array[WATER][9]);
+			else if (map[x - 1][y - 1].getType() == "water" && map[x - 1][y].getType() == "water")
+				map[x][y].setImg(img_array[WATER][8]);
+			else
+				map[x][y].setImg(img_array[WATER][7]);
+		}
+		else if (map[x][y - 1].getType() == "wall")
+		{
+			map[x][y].setImg(img_array[WATER][10]);
+			if (map[x - 1][y - 1].getType() != "wall" && map[x - 1][y - 1].getZ() == map[x][y - 1].getZ())
+				map[x][y - 1].setImg(img_array[WALL][1]);
+			else if (map[x + 1][y - 1].getType() != "wall" && map[x + 1][y - 1].getZ() == map[x][y - 1].getZ())
+				map[x][y - 1].setImg(img_array[WALL][2]);
+			else
+				map[x][y - 1].setImg(img_array[WALL][0]);
+		}
+		if (map[x - 1][y].getType() == "grass")
+		{
+			if (map[x - 1][y].getImg() == &img_array[GRASS][25] || map[x - 1][y - 1].getType() == "water")
+				map[x - 1][y].setImg(img_array[GRASS][27]);
+			else
+				map[x - 1][y].setImg(img_array[GRASS][29]);
+		}
+		if (map[x + 1][y].getType() == "grass")
+		{
+			if (map[x + 1][y].getImg() == &img_array[GRASS][25] || map[x + 1][y - 1].getType() == "water")
+				map[x + 1][y].setImg(img_array[GRASS][26]);
+			else
+				map[x + 1][y].setImg(img_array[GRASS][28]);
+		}
+		if (map[x][y + 1].getType() == "grass" && map[x + 1][y + 1].getType() != "water" && map[x - 1][y + 1].getType() != "water")
+		{
+			map[x][y + 1].setImg(img_array[GRASS][25]);
 		}
 }
 
@@ -799,7 +762,7 @@ void	affiche_map(std::vector<std::vector<CaseMap>> & map, sf::RenderWindow & win
 	}*/
 
 
-
+	
 	sf::RectangleShape rectangle(sf::Vector2f(64 + WIDTH_WIN, 32));
 
 

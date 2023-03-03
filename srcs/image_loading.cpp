@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:48:28 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/02 17:35:33 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/03 15:33:20 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,27 @@ std::vector< std::vector<sf::Texture>> create_array_texture(void)
 		lst_shadow.push_back(texture3);
 		lst_shadow.push_back(texture4);
 		lst_shadow.push_back(texture5);
+		sf::Texture texture6;
+		sf::Texture texture7;
+		sf::Texture texture8;
+		sf::Texture texture9;
+		sf::Texture texture0;
+		sf::Texture texture10;
+		sf::Texture texture11;
+		texture6.loadFromFile("../img/shadow/shadow_water_end.png");
+		texture7.loadFromFile("../img/shadow/shadow_water_start.png");
+		texture8.loadFromFile("../img/shadow/shadow_water_right.png");
+		texture9.loadFromFile("../img/shadow/shadow_water_bottom.png");
+		texture0.loadFromFile("../img/shadow/shadow_water_start2.png");
+		texture10.loadFromFile("../img/shadow/shadow_water_corner.png");
+		texture11.loadFromFile("../img/shadow/shadow_water_corner_reverse.png");
+        lst_shadow.push_back(texture6);
+		lst_shadow.push_back(texture7);
+		lst_shadow.push_back(texture8);
+		lst_shadow.push_back(texture9);
+		lst_shadow.push_back(texture0);
+		lst_shadow.push_back(texture10);
+		lst_shadow.push_back(texture11);
 		img_array.push_back(lst_shadow);
 	}
 

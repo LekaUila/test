@@ -21,6 +21,7 @@ INCLUDES = -I SFML_linux/include -I includes
 SRCS =	srcs/main.cpp\
 		srcs/image_loading.cpp\
 		srcs/map.cpp\
+		srcs/shadow_calcul.cpp\
 		class/map/CaseMap.cpp
 
 #====================================OBJECTS===================================#

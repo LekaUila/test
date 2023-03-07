@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:00:59 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/03 17:27:57 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/07 11:54:25 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -608,6 +608,80 @@ static void change_water_border(std::vector <std::vector <CaseMap>> & map, std::
 		}
 }
 
+static void add_ocean_to_map(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array)
+{
+	int h_map = (HEIGHT_WIN / 32) / 2 + 1;
+	int w_map = (WIDTH_WIN / 32) / 2 + 1;
+	if (h_map % 2 != 0)
+		h_map++;
+	if (w_map % 2 != 0)
+		w_map++;
+
+	for (size_t y = 0; y < HEIGHT_MAP; y++)
+	{
+		for (size_t x = 0; x < w_map; x++)
+		{
+			map[x][y].setImg(img_array[WATER][0]);
+			map[x][y].setType("water");
+			map[x][y].setZ(0);
+			if (x + 1 == w_map)
+			{
+				map[x + 1][y].setType("grass");
+				map[x + 1][y].setZ(0);
+				map[x + 2][y].setType("grass");
+				map[x + 2][y].setZ(0);
+			}
+		}
+		for (size_t x = WIDTH_MAP - w_map; x < WIDTH_MAP; x++)
+		{
+			map[x][y].setImg(img_array[WATER][0]);
+			map[x][y].setType("water");
+			map[x][y].setZ(0);
+			if (x == WIDTH_MAP - w_map)
+			{
+				map[x - 1][y].setType("grass");
+				map[x - 1][y].setZ(0);
+				map[x - 2][y].setType("grass");
+				map[x - 2][y].setZ(0);
+			}
+		}
+	}
+
+	for (size_t x = 0; x < WIDTH_MAP; x++)
+	{
+		for (size_t y = 0; y < h_map; y++)
+		{
+			map[x][y].setImg(img_array[WATER][0]);
+			map[x][y].setType("water");
+			map[x][y].setZ(0);
+			if (y + 1 == h_map && x >=  w_map && x < WIDTH_MAP - w_map)
+			{
+				map[x][y + 1].setType("grass");
+				map[x][y + 1].setZ(0);
+				map[x][y + 2].setType("grass");
+				map[x][y + 2].setZ(0);
+			}
+		}
+		for (size_t y = HEIGHT_MAP - h_map; y < HEIGHT_MAP; y++)
+		{
+			map[x][y].setImg(img_array[WATER][0]);
+			map[x][y].setType("water");
+			map[x][y].setZ(0);
+			if (y == HEIGHT_MAP - h_map && x >=  w_map && x < WIDTH_MAP - w_map)
+			{
+				map[x][y - 1].setType("grass");
+				map[x][y - 1].setZ(0);
+				map[x][y - 2].setType("grass");
+				map[x][y - 2].setZ(0);
+			}
+		}
+	}
+
+
+}
+
+
+
 std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Sprite>> & img_array)
 {
 	std::vector <std::vector <CaseMap>>	map;
@@ -661,11 +735,14 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 			if (map[x][y].getType() == "none")
 			{
 				//std::cout << x << " : " << y << std::endl;
-				recursive_generating(map, x, y, 10, 1);
+				recursive_generating(map, x, y, 20, 1);
 			}
 		}
 	}
 	print_map(map);
+
+
+	add_ocean_to_map(map, img_array);
 
 	
 	for (size_t y = 0; y < HEIGHT_MAP; y++)
@@ -722,7 +799,7 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 	{
 		for (size_t x = 0; x < WIDTH_MAP; x++)
 		{
-			if (map[x][y].getType() == "water")
+			if (map[x][y].getType() == "water" && x != 0 && y != 0 && y + 1 < HEIGHT_MAP && x + 1 < WIDTH_MAP) 
 				change_water_border(map, img_array, x, y);
 			if (map[x][y].getType() == "sand")
 				add_grass_border(map, img_array, x, y);

@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:00:59 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/07 11:54:25 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/07 18:23:07 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,67 +93,11 @@ static	void print_map(std::vector <std::vector <CaseMap>> & map)
 		std::cout << std::endl;
 	}
 }
-/*
-static	int smoothing(std::vector <std::vector <CaseMap>> & map, unsigned int x, unsigned int y)
-{
-	int need_a_wall = (x != 0 && map[x - 1][y].getZ() != map[x][y].getZ());
-	need_a_wall += (x != 0 && y != 0 && map[x - 1][y - 1].getZ() != map[x][y].getZ());
-	need_a_wall += (x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getZ() != map[x][y].getZ());
-	
-	need_a_wall += (y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() != map[x][y].getZ());
-	need_a_wall += (y != 0 && map[x][y - 1].getZ() != map[x][y].getZ());
 
-	need_a_wall += (x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() != map[x][y].getZ());
-	need_a_wall += (x + 1 < WIDTH_MAP && map[x + 1][y].getZ() != map[x][y].getZ());
-	need_a_wall += (x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getZ() != map[x][y].getZ());
 
-	int need_a_wall_spe = 0;
-	need_a_wall_spe += ((x != 0 && map[x - 1][y].getZ() == map[x][y].getZ()) 
-		&& (x != 0 && y != 0 && map[x - 1][y - 1].getZ() == map[x][y].getZ()) 
-		&& (x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getZ() == map[x][y].getZ()));
-
-	need_a_wall_spe += ((x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() == map[x][y].getZ()) 
-		&& (x + 1 < WIDTH_MAP && map[x + 1][y].getZ() == map[x][y].getZ())
-		&& (x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getZ() == map[x][y].getZ()));
-
-	need_a_wall_spe += ((x != 0 && y != 0 && map[x - 1][y - 1].getZ() == map[x][y].getZ()) 
-		&& (y != 0 && map[x][y - 1].getZ() == map[x][y].getZ())
-		&& (x + 1 < WIDTH_MAP && y != 0 && map[x + 1][y - 1].getZ() == map[x][y].getZ()));
-
-	need_a_wall_spe += ((x != 0 && y + 1 < HEIGHT_MAP && map[x - 1][y + 1].getZ() == map[x][y].getZ())
-		&& (y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() == map[x][y].getZ())
-		&& (x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x + 1][y + 1].getZ() == map[x][y].getZ()));
-	
-	if (need_a_wall > 5 || (need_a_wall == 4 && need_a_wall_spe))
-	{
-		unsigned int tabint[5] = {0, 0, 0, 0, 0 };
-
-	//	std::cout << "x : " << x << " | y : " << y << " | actual : " << map[x][y].getZ() << std::endl;
-
-		tabint[((x != 0) ? map[x - 1][y].getZ() : 4)]++;
-		tabint[((x != 0 && y != 0) ? map[x - 1][y - 1].getZ() : 4)]++;
-		tabint[((x != 0 && y + 1 < HEIGHT_MAP) ? map[x - 1][y + 1].getZ() : 4)]++;
-		tabint[((y + 1 < HEIGHT_MAP) ? map[x][y + 1].getZ() : 4)]++;
-		tabint[((y != 0) ? map[x][y - 1].getZ() : 4)]++;
-		tabint[((x + 1 < WIDTH_MAP && y != 0) ? map[x + 1][y - 1].getZ() : 4)]++;
-		tabint[((x + 1 < WIDTH_MAP) ? map[x + 1][y].getZ() : 4)]++;
-		tabint[((x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP) ?map[x + 1][y + 1].getZ() : 4)]++;
-		//std::cout << "0 : " << tabint[0] << "1 : " << tabint[1] << "2 : " << tabint[2] << "3 : " << tabint[3] << std::end;
-		if (tabint[0] >= tabint[1] && tabint[0] >= tabint[2] && tabint[0] >= tabint[3] && map[x][y].getZ() != 0)
-			map[x][y].setZ(0);
-		else if (tabint[1] >= tabint[0] && tabint[1] >= tabint[2] && tabint[1] >= tabint[3] && map[x][y].getZ() != 1)
-			map[x][y].setZ(1);
-		else if (tabint[2] >= tabint[1] && tabint[2] >= tabint[0] && tabint[2] >= tabint[3] && map[x][y].getZ() != 2)
-			map[x][y].setZ(2);
-		else if (tabint[3] >= tabint[1] && tabint[3] >= tabint[0] && tabint[3] >= tabint[0] && map[x][y].getZ() != 3)
-			map[x][y].setZ(3);
-		else 
-			map[x][y].setZ(std::rand() % 4);
-		//std::cout << "x : " << x << " | y : " << y << " | new : " << map[x][y].getZ() << std::endl << std::endl;
-		return (1);
-	}
-	return (0);
-}*/
+/*==========================================================================================*/
+									/*MAP ADD SPRITE*/
+/*==========================================================================================*/
 
 void add_grass_border(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y)
 {
@@ -383,6 +327,11 @@ static void associate_img(std::vector <std::vector <CaseMap>> & map, std::vector
 }
 
 
+/*==========================================================================================*/
+									/*BIG WALL*/
+/*==========================================================================================*/
+
+
 static void vertical_decr(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y, float z )
 {
 	if (y != 0 && map[x][y].getZ() == z)
@@ -453,6 +402,10 @@ static void add_big_wall(std::vector <std::vector <CaseMap>> & map, std::vector<
 	} 
 }
 
+/*==========================================================================================*/
+									/*BASSIC MAP GENERATING*/
+/*==========================================================================================*/
+
 static std::string	getMyType(std::vector <std::vector <CaseMap>> & map,  unsigned int x, unsigned int y)
 {
 	std::vector<std::string> tab;
@@ -513,6 +466,54 @@ static void	recursive_generating(std::vector <std::vector <CaseMap>> & map,  uns
 	}
 }
 
+/*==========================================================================================*/
+									/*WATER GENERATION*/
+/*==========================================================================================*/
+
+static void	generate_water(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y, unsigned int max);
+
+static void	generate_waterfall_from_bottom(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y)
+{
+	if (y < 8 || x < 4 || x > WIDTH_MAP - 4)
+		return ;
+	//std::cout << "test waterfall" << std::endl;
+	if ((map[x][y - 2].getType() == "grass" || map[x][y - 2].getType() == "water")&& map[x - 2][y].getType() == "wall" && map[x + 2][y].getType() == "wall"
+	&& (map[x][y - 4].getType() == "grass" || map[x][y - 4].getType() == "water") && map[x][y - 2].getZ() == map[x][y - 4].getZ())
+	{
+		std::cout << "generating waterfall : " << x << " | " << y << std::endl;
+		map[x][y].setImg(img_array[WATER][19]);
+		map[x + 1][y].setImg(img_array[WATER][19]);
+
+
+		map[x][y + 1].setImg(img_array[WATER][21]);
+		map[x + 1][y + 1].setImg(img_array[WATER][21]);
+		map[x][y - 1].setImg(img_array[WATER][20]);
+		map[x + 1][y - 1].setImg(img_array[WATER][20]);
+
+		map[x][y + 1].setImg(img_array[WATER][23], 1);
+		map[x + 1][y + 1].setImg(img_array[WATER][23], 1);
+		map[x][y - 1].setImg(img_array[WATER][22], 1);
+		map[x + 1][y - 1].setImg(img_array[WATER][22], 1);
+
+		map[x][y + 1].setImg(img_array[WATER][25], 2);
+		map[x + 1][y + 1].setImg(img_array[WATER][25], 2);
+		map[x][y - 1].setImg(img_array[WATER][24], 2);
+		map[x + 1][y - 1].setImg(img_array[WATER][24], 2);
+
+		map[x][y + 1].setImg(img_array[WATER][27], 3);
+		map[x + 1][y + 1].setImg(img_array[WATER][27], 3);
+		map[x][y - 1].setImg(img_array[WATER][26], 3);
+		map[x + 1][y - 1].setImg(img_array[WATER][26], 3);
+
+		map[x][y - 2].setImg(img_array[WATER][0]);
+		map[x + 1][y - 2].setImg(img_array[WATER][0]);
+		map[x][y - 2].setType("water");
+		map[x + 1][y - 2].setType("water");
+		generate_water(map, img_array, x, y - 4, 15);
+	}
+
+}
+
 static void	generate_water(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y, unsigned int max)
 {
 	if (x >= WIDTH_MAP || y >= HEIGHT_MAP || (map[x][y].getType() != "grass" && map[x][y].getType() != "wall") || std::rand() % 50 <= PROPAGATION || !max)
@@ -521,10 +522,8 @@ static void	generate_water(std::vector <std::vector <CaseMap>> & map, std::vecto
 	}
 	if (map[x][y].getType() == "wall")
 	{
-		int check = 0; //(x != 0 && (map[x - 1][y].getType() == "grass" || map[x - 1][y].getType() == "water") && map[x - 1][y].getZ() == map[x][y].getZ());
-		//check += (y != 0 && (map[x][y - 1].getType() == "grass" || map[x][y - 1].getType() == "water") && map[x][y - 1].getZ() == map[x][y].getZ());
+		int check = 0;
 		check += (y + 2 < HEIGHT_MAP && (map[x][y + 2].getType() == "grass" || map[x][y + 2].getType() == "water") && map[x][y + 2].getZ() == map[x][y].getZ());
-		//check += (x + 2 < WIDTH_MAP && (map[x + 2][y].getType() == "grass" || map[x + 2][y].getType() == "water") && map[x + 2][y].getZ() == map[x][y].getZ());
 		check += (x + 2 < WIDTH_MAP && (map[x + 2][y + 1].getType() == "grass" || map[x + 2][y + 1].getType() == "water"));
 		check += (x != 0 && (map[x - 1][y + 1].getType() == "grass" || map[x - 2][y + 1].getType() == "water"));
 		if (check == 3)
@@ -533,12 +532,12 @@ static void	generate_water(std::vector <std::vector <CaseMap>> & map, std::vecto
 			map[x + 1][y + 1].setImg(img_array[WATER][0]);
 			map[x][y + 1].setType("water");
 			map[x + 1][y + 1].setType("water");
+			generate_waterfall_from_bottom(map, img_array, x, y);
 			generate_water(map, img_array, x - 2, y, max - 1);
 			generate_water(map, img_array, x + 2, y, max - 1);
-			//generate_water(map, img_array, x, y - 2, max - 1);
 			generate_water(map, img_array, x, y + 2, max - 1);
-			return ;
 		}
+		return ;
 	}
 	int check = (x != 0 && (map[x - 1][y].getType() == "grass" || map[x - 1][y].getType() == "water") && map[x - 1][y].getZ() == map[x][y].getZ());
 	check += (y != 0 && (map[x][y - 1].getType() == "grass" || map[x][y - 1].getType() == "water") && map[x][y - 1].getZ() == map[x][y].getZ());
@@ -567,8 +566,6 @@ static void	generate_water(std::vector <std::vector <CaseMap>> & map, std::vecto
 
 static void change_water_border(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y)
 {
-		//if (x == 0 || x + 2 >= WIDTH_MAP || y == 0 || y + 2 >= HEIGHT_MAP)
-		//	return ;
 		if (map[x][y - 1].getType() == "grass")
 		{
 			if (map[x + 1][y - 1].getType() == "water" && map[x + 1][y].getType() == "water")
@@ -578,7 +575,7 @@ static void change_water_border(std::vector <std::vector <CaseMap>> & map, std::
 			else
 				map[x][y].setImg(img_array[WATER][7]);
 		}
-		else if (map[x][y - 1].getType() == "wall")
+		else if (map[x][y - 1].getType() == "wall" && map[x][y - 1].getImg() != &img_array[WATER][19])
 		{
 			map[x][y].setImg(img_array[WATER][10]);
 			if (map[x - 1][y - 1].getType() != "wall" && map[x - 1][y - 1].getZ() == map[x][y - 1].getZ())
@@ -681,6 +678,10 @@ static void add_ocean_to_map(std::vector <std::vector <CaseMap>> & map, std::vec
 }
 
 
+/*==========================================================================================*/
+									/*GENERALL FUNCTION*/
+/*==========================================================================================*/
+
 
 std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Sprite>> & img_array)
 {
@@ -734,12 +735,11 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 		{
 			if (map[x][y].getType() == "none")
 			{
-				//std::cout << x << " : " << y << std::endl;
 				recursive_generating(map, x, y, 20, 1);
 			}
 		}
 	}
-	print_map(map);
+	
 
 
 	add_ocean_to_map(map, img_array);
@@ -754,26 +754,8 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 	}
 
 
-	print_map(map);
-/*
-	int smooth_check = 1;
-	int count = 0;
-	while (smooth_check && count < 2000)
-	{
-		count++;
-		smooth_check = 0;
-		//std::cout << "new smooth" << std::endl;
-		for (size_t y = 0; y < HEIGHT_MAP; y++)
-		{
-			for (size_t x = 0; x < WIDTH_MAP; x++)
-			{
-				
-				smooth_check += smoothing(map, x, y); 
-				
-			}
-		}
-		//std::cout << std::endl << std::endl << std::endl;
-	}*/
+	
+
 	for (size_t y = 0; y < HEIGHT_MAP; y++)
 	{
 		for (size_t x = 0; x < WIDTH_MAP; x++)
@@ -782,7 +764,7 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 		}
 	}
 
-	for (size_t i = 0; i < RANDOM_LEVEL; i++) /* (WIDTH_MAP * HEIGHT_MAP) / 1000*/
+	for (size_t i = 0; i < RANDOM_LEVEL; i++) 
 	{
 
 		int x = 3;
@@ -805,7 +787,7 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 				add_grass_border(map, img_array, x, y);
 		}
 	}
-	print_map(map);
+	
 
 
 	for (size_t y = 0; y < HEIGHT_MAP; y++)
@@ -824,21 +806,11 @@ void	affiche_map(std::vector<std::vector<CaseMap>> & map, sf::RenderWindow & win
 	
 	for (size_t y = yadd / 32; y < yadd / 32 + HEIGHT_WIN  / 32 + 2 && y < HEIGHT_MAP; y++)
 	{
-		//std::cout << yadd / 32 << "  " << y << "  "  << yadd / 32 + HEIGHT_WIN / 32<< std::endl;
 		for (size_t x = xadd / 32; x < xadd / 32 + WIDTH_WIN / 32 + 2 && x < WIDTH_MAP; x++)
 		{
-			//std::cout << xadd / 32 << "  " << x << "  "  << xadd / 32 + WIDTH_WIN / 2 << std::endl;
 			map[x][y].draw(window, -xadd + 32, -yadd + 32);
 		}
 	}	
-	/*
-	for (size_t y = 0; y < HEIGHT_MAP; y++)
-	{
-		for (size_t x = 0; x < WIDTH_MAP; x++)
-		{
-			map[x][y].draw(window, -xadd, -yadd);
-		}
-	}*/
 
 
 	

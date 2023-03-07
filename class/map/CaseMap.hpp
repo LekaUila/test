@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:06:41 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/01 19:04:43 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/07 18:35:13 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <iostream>
 # include <string>
 # include <vector>
+# include "../includes/define_anime_time.hpp"
 class CaseMap 
 {
 private:
@@ -24,9 +25,11 @@ private:
 	unsigned int	x;
 	unsigned int	y;
 	float	z;
+	unsigned int anime_frame = 0;
 	std::string		type;
-	sf::Sprite		*img = NULL;
+	std::vector<sf::Sprite *>		img;
 	std::vector<sf::Sprite *>		decors_add;
+	std::vector<sf::Sprite *>		shadow_add;
 
 protected:
 
@@ -37,8 +40,6 @@ public:
 	CaseMap();
 	CaseMap(unsigned int x, unsigned int y, unsigned int z, std::string type);					//constructor
 	~CaseMap();							//destructor
-	CaseMap (const CaseMap &obj);				//copie constructor
-	CaseMap& operator=(const CaseMap& x);		//assignation constructor
 
 	unsigned int getX() const;
 	unsigned int getY() const;
@@ -49,9 +50,12 @@ public:
 	const std::string & getType() const;
 	void setType(std::string type);
 	sf::Sprite * getImg() const;
+	sf::Sprite * getImg(int ind) const;
 	void setImg(sf::Sprite &img);
+	void setImg(sf::Sprite &img, int ind);
 	void draw(sf::RenderWindow & window, unsigned int xadd, unsigned int yadd);
 	void addDecors(sf::Sprite &sp);
+	void addShadow(sf::Sprite &sp);
 
 
  

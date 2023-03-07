@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 12:22:47 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/03 17:31:52 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/07 16:47:25 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,29 +17,29 @@ static bool add_shadow_water(std::vector <std::vector <CaseMap>> & map, std::vec
 	/*  triangle bas*/
 	if (x + 2 < WIDTH_MAP && map[x][y].getImg() == &img_array[WATER][9])
 	{
-		map[x + 1][y].addDecors(img_array[SHADOW][6]);
+		map[x + 1][y].addShadow(img_array[SHADOW][6]);
 		return (1);
 	}
 	/*  triangle haut*/
 	else if (x + 1 < WIDTH_MAP && y != 0 && map[x][y].getImg() == &img_array[GRASS][26] && map[x][y].getZ() == map[x][y - 1].getZ() && map[x][y - 1].getType() == "water")
 	{
 		if (map[x - 1][y - 1].getType() != "grass")
-			map[x][y - 1].addDecors(img_array[SHADOW][9]);
+			map[x][y - 1].addShadow(img_array[SHADOW][9]);
 		return (1);
 	}
 	/*corner*/
 	else if(x + 1 < WIDTH_MAP && y != 0 &&  map[x][y].getImg() == &img_array[GRASS][27] && map[x][y].getZ() == map[x][y - 1].getZ() && map[x][y - 1].getType() == "water"
 			&& map[x][y].getZ() == map[x + 1][y].getZ() && map[x + 1][y].getType() == "water")
 	{
-		map[x][y - 1].addDecors(img_array[SHADOW][8]);
+		map[x][y - 1].addShadow(img_array[SHADOW][8]);
 		if (map[x][y].getZ() == map[x + 1][y - 1].getZ() && map[x + 1][y - 1].getType() == "water")
 		{
-			map[x + 1][y].addDecors(img_array[SHADOW][7]);
-			map[x + 1][y - 1].addDecors(img_array[SHADOW][11]);
+			map[x + 1][y].addShadow(img_array[SHADOW][7]);
+			map[x + 1][y - 1].addShadow(img_array[SHADOW][11]);
 		}
 		else
 		{
-			map[x + 1][y].addDecors(img_array[SHADOW][5]);
+			map[x + 1][y].addShadow(img_array[SHADOW][5]);
 		}
 		
 		return (1);
@@ -49,15 +49,15 @@ static bool add_shadow_water(std::vector <std::vector <CaseMap>> & map, std::vec
 	{
 		if (map[x][y].getZ() == map[x + 1][y + 1].getZ() && map[x + 1][y + 1].getType() == "grass")
 		{
-			map[x + 1][y].addDecors(img_array[SHADOW][10]);
+			map[x + 1][y].addShadow(img_array[SHADOW][10]);
 		}
 		else if (map[x][y].getZ() == map[x + 1][y - 1].getZ() && map[x + 1][y - 1].getType() == "water")
 		{
-			map[x + 1][y].addDecors(img_array[SHADOW][7]);
+			map[x + 1][y].addShadow(img_array[SHADOW][7]);
 		}
 		else
 		{
-			map[x + 1][y].addDecors(img_array[SHADOW][5]);
+			map[x + 1][y].addShadow(img_array[SHADOW][5]);
 		}
 		return (1);
 	}
@@ -65,7 +65,7 @@ static bool add_shadow_water(std::vector <std::vector <CaseMap>> & map, std::vec
 	else if(x + 1 < WIDTH_MAP && y != 0 && map[x][y].getImg() == &img_array[GRASS][25] && map[x][y].getZ() == map[x][y - 1].getZ() && map[x][y - 1].getType() == "water")
 	{
 		if (!(map[x][y].getZ() == map[x - 1][y - 1].getZ() && map[x - 1][y - 1].getType() == "grass"))
-			map[x][y - 1].addDecors(img_array[SHADOW][8]);
+			map[x][y - 1].addShadow(img_array[SHADOW][8]);
 		return (1);
 	}
 	return (0);
@@ -81,13 +81,13 @@ void add_shadow(std::vector <std::vector <CaseMap>> & map, std::vector< std::vec
 	if (x + 1 < WIDTH_MAP && y + 1 < HEIGHT_MAP && map[x][y + 1].getZ() > map[x + 1][y + 1].getZ() && 
 		map[x][y].getZ() > map[x + 1][y + 1].getZ() && map[x + 1][y].getZ() > map[x + 1][y + 1].getZ() && map[x][y].getZ() == map[x + 1][y].getZ())
 	{
-		map[x + 1][y].addDecors(img_array[SHADOW][2]);
+		map[x + 1][y].addShadow(img_array[SHADOW][2]);
 	}
 	/*spe 2*/
 	else if (x + 1 < WIDTH_MAP && y != 0  && map[x][y].getZ() > map[x + 1][y].getZ() && 
 		map[x][y - 1].getZ() > map[x + 1][y].getZ() && map[x + 1][y - 1].getZ() > map[x + 1][y].getZ() && map[x][y - 1].getZ() == map[x + 1][y - 1].getZ())
 	{
-		map[x + 1][y].addDecors(img_array[SHADOW][3]);
+		map[x + 1][y].addShadow(img_array[SHADOW][3]);
 	}
 	/*  triangle bas*/
 	else if (x + 2 < WIDTH_MAP && (map[x][y].getImg() == &img_array[SAND][21] || map[x][y].getImg() == &img_array[GRASS][21]))
@@ -96,19 +96,19 @@ void add_shadow(std::vector <std::vector <CaseMap>> & map, std::vector< std::vec
 		{
 			if (map[x][y + 2].getZ() != 2)
 			{
-				map[x + 1][y].addDecors(img_array[SHADOW][1]);
+				map[x + 1][y].addShadow(img_array[SHADOW][1]);
 			}
 			if (y != 0 && map[x][y - 1].getZ() > map[x + 1][y].getZ() + 1)
 			{
-				map[x + 2][y - 1].addDecors(img_array[SHADOW][1]);
+				map[x + 2][y - 1].addShadow(img_array[SHADOW][1]);
 			}
 		}
 		else
 		{
-			map[x + 1][y].addDecors(img_array[SHADOW][1]);
+			map[x + 1][y].addShadow(img_array[SHADOW][1]);
 			if (y != 0 && map[x][y - 1].getZ() > map[x + 1][y].getZ() + 1)
 			{
-				map[x + 2][y - 1].addDecors(img_array[SHADOW][1]);
+				map[x + 2][y - 1].addShadow(img_array[SHADOW][1]);
 			}
 		}
 	}
@@ -117,28 +117,28 @@ void add_shadow(std::vector <std::vector <CaseMap>> & map, std::vector< std::vec
 	{
 		if (x != 0 && map[x - 1][y].getZ() > map[x][y].getZ() - 2 && map[x][y - 1].getZ() <= map[x][y].getZ() - 2)
 		{
-			map[x + 1][y - 1].addDecors(img_array[SHADOW][0]);
+			map[x + 1][y - 1].addShadow(img_array[SHADOW][0]);
 		}
 		else
-			map[x + 1][y - 1].addDecors(img_array[SHADOW][4]);
+			map[x + 1][y - 1].addShadow(img_array[SHADOW][4]);
 		if (x + 2 < WIDTH_MAP && y != 0 && map[x][y].getZ() > map[x][y - 1].getZ() + 1 && map[x][y].getZ() > map[x + 2][y - 2].getZ() + 1)
 		{
-			map[x + 2][y - 2].addDecors(img_array[SHADOW][4]);
+			map[x + 2][y - 2].addShadow(img_array[SHADOW][4]);
 		}
 	}
 	/*corner*/
 	else if(x + 1 < WIDTH_MAP && y != 0 &&  (map[x][y].getImg() == &img_array[SAND][27] || map[x][y].getImg() == &img_array[GRASS][27]))
 	{
-		map[x + 1][y - 1].addDecors(img_array[SHADOW][0]);
-		map[x + 1][y].addDecors(img_array[SHADOW][0]);
-		//map[x][y - 1].addDecors(img_array[SHADOW][0]);
+		map[x + 1][y - 1].addShadow(img_array[SHADOW][0]);
+		map[x + 1][y].addShadow(img_array[SHADOW][0]);
+		//map[x][y - 1].addShadow(img_array[SHADOW][0]);
 		if (y != 0 && map[x][y].getZ() > map[x + 1][y].getZ() + 1)
 		{
-			map[x + 2][y - 1].addDecors(img_array[SHADOW][0]);
+			map[x + 2][y - 1].addShadow(img_array[SHADOW][0]);
 		}
 		if (x + 3 < WIDTH_MAP && map[x][y].getZ() > map[x][y - 1].getZ() + 1 && map[x + 2][y - 2].getZ() < map[x][y].getZ() - 1)
 		{
-			map[x + 2][y - 2].addDecors(img_array[SHADOW][0]);
+			map[x + 2][y - 2].addShadow(img_array[SHADOW][0]);
 		}
 	}
 	/*right*/
@@ -149,24 +149,24 @@ void add_shadow(std::vector <std::vector <CaseMap>> & map, std::vector< std::vec
 	{
 		if (map[x][y].getImg() == &img_array[WALL][2] && (map[x + 1][y].getZ() == 1 || (y + 1 < HEIGHT_MAP && map[x][y + 1].getType() == "water" && map[x][y].getZ() == map[x][y + 1].getZ())))
 		{
-			map[x + 1][y].addDecors(img_array[SHADOW][1]);
+			map[x + 1][y].addShadow(img_array[SHADOW][1]);
 			if (map[x][y + 1].getZ() == 1.5 && map[x + 2][y - 1].getZ() == 0 && map[x + 2][y - 1].getZ() == 0 && map[x + 2][y ].getZ() != 1)
-				map[x + 2][y - 1].addDecors(img_array[SHADOW][1]);
+				map[x + 2][y - 1].addShadow(img_array[SHADOW][1]);
 		}
 		else
-			map[x + 1][y].addDecors(img_array[SHADOW][0]);
+			map[x + 1][y].addShadow(img_array[SHADOW][0]);
 		if (y != 0 && map[x][y].getZ() > map[x + 1][y].getZ() + 1)
 		{
 			if (y != 1 && (map[x + 2][y - 1].getZ() < map[x + 2][y - 2].getZ() ))
 			{
-				map[x + 2][y - 1].addDecors(img_array[SHADOW][3]);
+				map[x + 2][y - 1].addShadow(img_array[SHADOW][3]);
 			}
 			else if (y != 1 && (map[x + 2][y].getZ() < map[x + 2][y - 1].getZ() ))
 			{
-				map[x + 2][y - 1].addDecors(img_array[SHADOW][2]);
+				map[x + 2][y - 1].addShadow(img_array[SHADOW][2]);
 			}
 			else
-				map[x + 2][y - 1].addDecors(img_array[SHADOW][0]);
+				map[x + 2][y - 1].addShadow(img_array[SHADOW][0]);
 		}
 	}
 	/*top*/
@@ -174,10 +174,10 @@ void add_shadow(std::vector <std::vector <CaseMap>> & map, std::vector< std::vec
 	{
 		if (map[x][y].getZ() > map[x + 1][y - 1].getZ())
 		{
-			map[x + 1][y - 1].addDecors(img_array[SHADOW][0]);
+			map[x + 1][y - 1].addShadow(img_array[SHADOW][0]);
 			if (x + 2 < WIDTH_MAP && map[x][y].getZ() > map[x][y - 1].getZ() + 1 && map[x + 2][y - 2].getZ() < map[x][y].getZ() - 1)
 			{
-				map[x + 2][y - 2].addDecors(img_array[SHADOW][0]);
+				map[x + 2][y - 2].addShadow(img_array[SHADOW][0]);
 			}
 		}
 	}

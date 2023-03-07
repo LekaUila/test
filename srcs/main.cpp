@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:51:47 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/03 16:50:22 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/07 18:29:28 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int main()
     // create the window
     sf::RenderWindow window(sf::VideoMode(WIDTH_WIN + 64, HEIGHT_WIN + 64), "My window");
 
-    //window.setFramerateLimit(60);
+    window.setFramerateLimit(60);
 
     sf::Clock clock;
 
@@ -57,25 +57,27 @@ int main()
         float delta = clock.restart().asSeconds();
         float fps = 1.0f / delta;
         std::string title(std::to_string(fps));
+        title = " coor : " + std::to_string(camera[0] / 32) + " | " + std::to_string(camera[1] / 32) + "fps : " + title;
         window.setTitle(title);
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && camera[0] - (WIDTH_WIN / 2) - MOVE_SPEED >= 0 )
+        if (window.hasFocus())
         {
-            camera[0]-= MOVE_SPEED;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && camera[0] - (WIDTH_WIN / 2) - MOVE_SPEED >= 0 )
+            {
+                camera[0]-= MOVE_SPEED;
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && camera[0] - (WIDTH_WIN / 2) + MOVE_SPEED < (WIDTH_MAP * 32) - (WIDTH_WIN))
+            {
+                camera[0]+= MOVE_SPEED;
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && camera[1] - (HEIGHT_WIN / 2) - MOVE_SPEED >= 0 )
+            {
+                camera[1]-= MOVE_SPEED;
+            }
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && camera[1] - (HEIGHT_WIN / 2) + MOVE_SPEED < (HEIGHT_MAP * 32) - (HEIGHT_WIN))
+            {
+                camera[1]+= MOVE_SPEED;
+            }
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && camera[0] - (WIDTH_WIN / 2) + MOVE_SPEED < (WIDTH_MAP * 32) - (WIDTH_WIN))
-        {
-            camera[0]+= MOVE_SPEED;
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && camera[1] - (HEIGHT_WIN / 2) - MOVE_SPEED >= 0 )
-        {
-            camera[1]-= MOVE_SPEED;
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && camera[1] - (HEIGHT_WIN / 2) + MOVE_SPEED < (HEIGHT_MAP * 32) - (HEIGHT_WIN))
-        {
-            camera[1]+= MOVE_SPEED;
-        }
-
         // clear the window with black color
         window.clear(sf::Color::Black);
 

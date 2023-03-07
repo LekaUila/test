@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:06:45 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/01 19:44:16 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/07 18:28:12 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,6 @@ CaseMap::CaseMap(unsigned int x, unsigned int y, unsigned int z, std::string typ
 
 CaseMap::~CaseMap()
 {
-}
-
-CaseMap::CaseMap (const CaseMap &obj)
-: x(obj.getX()), y(obj.getY()), z(obj.getZ()), img(obj.getImg()), type(obj.getType())
-{
-}
-CaseMap& CaseMap::operator=(const CaseMap& x)
-{
-	this->x = x.getX();
-	this->y = x.getY();
-	this->z = x.getZ();
-	this->type = x.getType();
-	this->img = x.getImg();
-	return (*this);
 }
 
 unsigned int CaseMap::getX() const
@@ -79,28 +65,58 @@ void CaseMap::setType(std::string type)
 
 sf::Sprite * CaseMap::getImg() const
 {
-	return (this->img);
+	if (this->img.size() == 0)
+		return (NULL);
+	return (this->img[0]);
+}
+
+sf::Sprite * CaseMap::getImg(int ind) const
+{
+	if (this->img.size() <= ind)
+		return (NULL);
+	return (this->img[ind]);
 }
 
 void CaseMap::setImg(sf::Sprite &img)
 {
-	this->img = &img;
+	if (this->img.size() <= 0)
+		this->img.push_back(&img);
+	else
+		this->img[0] = &img;
+}
+
+void CaseMap::setImg(sf::Sprite &img, int ind)
+{
+	if (this->img.size() <= ind)
+		this->img.push_back(&img);
+	else
+		this->img[ind] = &img;
 }
 
 void CaseMap::draw(sf::RenderWindow & window, unsigned int xadd, unsigned int yadd)
 {
-	this->img->setPosition(sf::Vector2<float>((this->x * 32 + xadd) , (this->y * 32 + yadd)));
-	window.draw(*this->img);
-	
+	this->img[this->anime_frame / FLOOR_T]->setPosition(sf::Vector2<float>((this->x * 32 + xadd) , (this->y * 32 + yadd)));
+	window.draw(*this->img[this->anime_frame / FLOOR_T]);
+
+	this->anime_frame = this->anime_frame + 1 >= this->img.size() * FLOOR_T ? 0 : this->anime_frame + 1;
+
 	for (size_t i = 0; i < this->decors_add.size(); i++)
 	{
 		(*(this->decors_add[i])).setPosition(sf::Vector2<float>((this->x * 32 + xadd) , (this->y * 32 + yadd)));
 		window.draw(*(this->decors_add[i]));
 	}
-	
+	for (size_t i = 0; i < this->shadow_add.size(); i++)
+	{
+		(*(this->shadow_add[i])).setPosition(sf::Vector2<float>((this->x * 32 + xadd) , (this->y * 32 + yadd)));
+		window.draw(*(this->shadow_add[i]));
+	}
 }
 
 void CaseMap::addDecors(sf::Sprite &sp)
 {
 	this->decors_add.push_back(&sp);
+}
+void CaseMap::addShadow(sf::Sprite &sp)
+{
+	this->shadow_add.push_back(&sp);
 }

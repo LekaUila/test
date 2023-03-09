@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:06:41 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/07 18:35:13 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/09 13:21:40 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ public:
 	void setImg(sf::Sprite &img, int ind);
 	void draw(sf::RenderWindow & window, unsigned int xadd, unsigned int yadd);
 	void addDecors(sf::Sprite &sp);
+	int  asDecors() const;
 	void addShadow(sf::Sprite &sp);
 
 

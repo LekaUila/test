@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/22 16:00:59 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/07 18:23:07 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/09 13:35:16 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -420,7 +420,6 @@ static std::string	getMyType(std::vector <std::vector <CaseMap>> & map,  unsigne
 		tab.push_back(map[x][y + 1].getType());
 	if (tab.size() == 0)
 	{
-		std::cout << "tab NULL" << std::endl;
 		return ("grass");
 	}
 	return (tab[std::rand() % tab.size()]);
@@ -480,7 +479,8 @@ static void	generate_waterfall_from_bottom(std::vector <std::vector <CaseMap>> &
 	if ((map[x][y - 2].getType() == "grass" || map[x][y - 2].getType() == "water")&& map[x - 2][y].getType() == "wall" && map[x + 2][y].getType() == "wall"
 	&& (map[x][y - 4].getType() == "grass" || map[x][y - 4].getType() == "water") && map[x][y - 2].getZ() == map[x][y - 4].getZ())
 	{
-		std::cout << "generating waterfall : " << x << " | " << y << std::endl;
+		if (DEBUG_INFO && COOR_INFO)
+			std::cout << "\e[1;37m		generating waterfall : \e[1;33m" << x << "\e[1;37m | \e[1;33m" << y << "\e[0;m" << std::endl;
 		map[x][y].setImg(img_array[WATER][19]);
 		map[x + 1][y].setImg(img_array[WATER][19]);
 
@@ -677,6 +677,45 @@ static void add_ocean_to_map(std::vector <std::vector <CaseMap>> & map, std::vec
 
 }
 
+/*==========================================================================================*/
+									/*DECORATION GENERATION*/
+/*==========================================================================================*/
+
+static void	generate_flower(std::vector <std::vector <CaseMap>> & map, std::vector< std::vector<sf::Sprite>> & img_array, unsigned int x, unsigned int y, unsigned int max, int type_flower)
+{
+	if (x >= WIDTH_MAP || y >= HEIGHT_MAP || map[x][y].getType() != "grass")
+	{
+		return ;
+	}
+
+	int check = (x != 0 && (map[x - 1][y].getType() == "grass") && map[x - 1][y].getZ() == map[x][y].getZ());
+	check += (y != 0 && (map[x][y - 2].getType() == "grass") && map[x][y - 1].getZ() == map[x][y].getZ());
+	check += (y + 2 < HEIGHT_MAP && (map[x][y + 2].getType() == "grass") && map[x][y + 2].getZ() == map[x][y].getZ());
+	check += (x + 2 < WIDTH_MAP && (map[x + 2][y].getType() == "grass") && map[x + 2][y].getZ() == map[x][y].getZ());
+
+	if (!map[x][y].asDecors() && (y + 1 < HEIGHT_MAP && (map[x][y + 1].getType() == "grass")))
+	{
+		map[x][y].addDecors(img_array[DECORS][type_flower + 1]);
+		map[x + 1][y].addDecors(img_array[DECORS][type_flower + 1]);
+		map[x][y + 1].addDecors(img_array[DECORS][type_flower + 1]);
+		map[x + 1][y + 1].addDecors(img_array[DECORS][type_flower + 1]);
+	}
+	if (check == 4 && max && std::rand() % 50 > PROPAGATION_FLOWER)
+	{
+		/*if (!map[x][y].asDecors())
+		{
+			map[x][y].addDecors(img_array[DECORS][type_flower]);
+			map[x + 1][y].addDecors(img_array[DECORS][type_flower]);
+			map[x][y + 1].addDecors(img_array[DECORS][type_flower]);
+			map[x + 1][y + 1].addDecors(img_array[DECORS][type_flower]);
+		}*/
+		generate_flower(map, img_array, x - 2, y, max - 1, type_flower);
+		generate_flower(map, img_array, x + 2, y, max - 1, type_flower);
+		generate_flower(map, img_array, x, y - 2, max - 1, type_flower);
+		generate_flower(map, img_array, x, y + 2, max - 1, type_flower);
+	}
+}
+
 
 /*==========================================================================================*/
 									/*GENERALL FUNCTION*/
@@ -705,6 +744,10 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 	map[1][0] = CaseMap(1, 0, z_first, type_first);
 	map[0][1] = CaseMap(0, 1, z_first, type_first);
 	map[1][1] = CaseMap(1, 1, z_first, type_first);
+
+
+	if (DEBUG_INFO)
+		std::cout << "\e[0;35mMAP VARIATION GENERATION\e[0;m" << std::endl;
 	for (size_t i = 0; i < RANDOM_LEVEL; i++) /* (WIDTH_MAP * HEIGHT_MAP) / 1000*/
 	{
 
@@ -725,10 +768,16 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 		map[x + 1][y] = casem2;
 		map[x][y + 1] = casem3;
 		map[x + 1][y + 1] = casem4;
+		if (DEBUG_INFO && COOR_INFO)
+			std::cout << "\e[1;37m	generating \e[0;36m" << type_ << "\e[1;37m : \e[1;33m" << x << "\e[1;37m | \e[1;33m" << y << "\e[0;m" << std::endl;
 		if (x + 2 < WIDTH_MAP)
 			recursive_generating(map, x + 2, y, 15, 1);
 	}
-	
+	if (DEBUG_INFO)
+		std::cout << "\e[1;32m	\e[5mDone\e[25m\e[0;m" << std::endl;
+
+	if (DEBUG_INFO)
+		std::cout << "\e[0;35mMAP FILLING\e[0;m" << std::endl;
 	for (size_t y = 0; y < HEIGHT_MAP; y++)
 	{
 		for (size_t x = 0; x < WIDTH_MAP; x++)
@@ -739,12 +788,18 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 			}
 		}
 	}
-	
+	if (DEBUG_INFO)
+		std::cout << "\e[1;32m	\e[5mDone\e[25m\e[0;m" << std::endl;
 
-
+	if (DEBUG_INFO)
+		std::cout << "\e[0;35mMAP OCEAN GENERATION\e[0;m" << std::endl;
 	add_ocean_to_map(map, img_array);
+	if (DEBUG_INFO)
+		std::cout << "\e[1;32m	\e[5mDone\e[25m\e[0;m" << std::endl;
 
-	
+
+	if (DEBUG_INFO)
+		std::cout << "\e[0;35mSIZE'S WALL CALCULATING\e[0;m" << std::endl;
 	for (size_t y = 0; y < HEIGHT_MAP; y++)
 	{
 		for (size_t x = 0; x < WIDTH_MAP; x++)
@@ -752,10 +807,11 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 			add_big_wall(map, img_array, x, y);
 		}
 	}
+	if (DEBUG_INFO)
+		std::cout << "\e[1;32m	\e[5mDone\e[25m\e[0;m" << std::endl;
 
-
-	
-
+	if (DEBUG_INFO)
+		std::cout << "\e[0;35mBASIC TEXTURE APPLICATION\e[0;m" << std::endl;
 	for (size_t y = 0; y < HEIGHT_MAP; y++)
 	{
 		for (size_t x = 0; x < WIDTH_MAP; x++)
@@ -763,7 +819,11 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 			associate_img(map, img_array, x, y);
 		}
 	}
+	if (DEBUG_INFO)
+		std::cout << "\e[1;32m	\e[5mDone\e[25m\e[0;m" << std::endl;
 
+	if (DEBUG_INFO)
+		std::cout << "\e[0;35mWATER GENERATION\e[0;m" << std::endl;
 	for (size_t i = 0; i < RANDOM_LEVEL; i++) 
 	{
 
@@ -774,9 +834,43 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 			x = std::rand() % (WIDTH_MAP - 1);
 			y = std::rand() % (HEIGHT_MAP - 1);
 		}
+		if (DEBUG_INFO && COOR_INFO)
+			std::cout << "\e[1;37m	generating water : \e[1;33m" << x << "\e[1;37m | \e[1;33m" << y << "\e[0;m" << std::endl;
 		generate_water(map, img_array, x , y, 15);
 	}
+	if (DEBUG_INFO)
+		std::cout << "\e[1;32m	\e[5mDone\e[25m\e[0;m" << std::endl;
 
+	if (DEBUG_INFO)
+		std::cout << "\e[0;35mDECORATION GENERATION\e[0;m" << std::endl;
+	for (size_t i = 0; i < RANDOM_LEVEL; i++) 
+	{
+
+		int x = 3;
+		int y = 3;
+		while (x % 2 != 0 || y % 2 != 0 )
+		{
+			x = std::rand() % (WIDTH_MAP - 1);
+			y = std::rand() % (HEIGHT_MAP - 1);
+		}
+		if (map[x][y].getType() == "grass")
+		{
+			if (DEBUG_INFO && COOR_INFO)
+				std::cout << "\e[1;37m	generating flower : \e[1;33m" << x << "\e[1;37m | \e[1;33m" << y << "\e[0;m" << std::endl;
+			generate_flower(map, img_array, x , y, 6, (std::rand() % 3) * 2 + 4 );
+		}
+		if (map[x][y].getType() == "water")
+		{
+			if (DEBUG_INFO && COOR_INFO)
+				std::cout << "\e[1;37m	generating water stone : \e[1;33m" << x << "\e[1;37m | \e[1;33m" << y << "\e[0;m" << std::endl;
+			map[x][y].addDecors(img_array[DECORS][std::rand() % 4]);
+		}
+	}
+	if (DEBUG_INFO)
+		std::cout << "\e[1;32m	\e[5mDone\e[25m\e[0;m" << std::endl;
+
+	if (DEBUG_INFO)
+		std::cout << "\e[0;35mBIOME BORDER MODIFICATIN\e[0;m" << std::endl;
 	for (size_t y = 0; y < HEIGHT_MAP; y++)
 	{
 		for (size_t x = 0; x < WIDTH_MAP; x++)
@@ -787,9 +881,11 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 				add_grass_border(map, img_array, x, y);
 		}
 	}
-	
+	if (DEBUG_INFO)
+		std::cout << "\e[1;32m	\e[5mDone\e[25m\e[0;m" << std::endl;
 
-
+	if (DEBUG_INFO)
+		std::cout << "\e[0;35mSHADOW CALCULATING\e[0;m" << std::endl;
 	for (size_t y = 0; y < HEIGHT_MAP; y++)
 	{
 		for (size_t x = 0; x < WIDTH_MAP; x++)
@@ -797,6 +893,8 @@ std::vector<std::vector<CaseMap>> generate_map(std::vector< std::vector<sf::Spri
 			add_shadow(map, img_array, x, y);
 		}
 	}
+	if (DEBUG_INFO)
+		std::cout << "\e[1;32m	\e[5mDone\e[25m\e[0;m" << std::endl;
 	
 	return (map);
 }

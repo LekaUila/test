@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:49:47 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/07 18:30:09 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/09 13:32:48 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include "define_anime_time.hpp"
 # include "../class/map/CaseMap.hpp"
 
+# define DEBUG_INFO 1
+# define COOR_INFO 1
 
 # define RANDOM_LEVEL 150
 # define WIDTH_WIN 1600
@@ -32,6 +34,7 @@
 # define HEIGHT_MAP 500
 # define MOVE_SPEED 25
 # define PROPAGATION 5
+# define PROPAGATION_FLOWER 20
 
 enum e_type 
 {
@@ -39,7 +42,8 @@ enum e_type
 	SAND,
 	GRASS,
 	WALL,
-	SHADOW
+	SHADOW,
+	DECORS
 };
 
 /* ================ FUNCTIONS ============== */

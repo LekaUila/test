@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 11:48:28 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/03 15:33:20 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/09 13:14:54 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,6 +282,35 @@ std::vector< std::vector<sf::Texture>> create_array_texture(void)
 		lst_shadow.push_back(texture10);
 		lst_shadow.push_back(texture11);
 		img_array.push_back(lst_shadow);
+	}
+	{
+		std::vector<sf::Texture> lst_decors;
+
+		for (size_t i = 0; i < 4; i++)
+		{
+			sf::Texture texture1;
+			texture1.loadFromFile("../img/floor_decoration/stone_" + std::to_string(i + 1) + ".png");
+			lst_decors.push_back(texture1);
+		}
+		sf::Texture texture1;
+		sf::Texture texture2;
+		sf::Texture texture3;
+		sf::Texture texture4;
+		sf::Texture texture5;
+		sf::Texture texture6;
+		texture1.loadFromFile("../img/floor_decoration/flower_purple_full.png");
+		texture2.loadFromFile("../img/floor_decoration/flower_purple.png");
+		texture3.loadFromFile("../img/floor_decoration/flower_white_full.png");
+		texture4.loadFromFile("../img/floor_decoration/flower_white.png");
+		texture5.loadFromFile("../img/floor_decoration/flower_yellow_full.png");
+		texture6.loadFromFile("../img/floor_decoration/flower_yellow.png");
+        lst_decors.push_back(texture1);
+		lst_decors.push_back(texture2);
+		lst_decors.push_back(texture3);
+		lst_decors.push_back(texture4);
+		lst_decors.push_back(texture5);
+		lst_decors.push_back(texture6);
+		img_array.push_back(lst_decors);
 	}
 
 	return (img_array);

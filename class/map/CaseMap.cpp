@@ -6,7 +6,7 @@
 /*   By: lflandri <lflandri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:06:45 by lflandri          #+#    #+#             */
-/*   Updated: 2023/03/07 18:28:12 by lflandri         ###   ########.fr       */
+/*   Updated: 2023/03/09 13:22:43 by lflandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,11 @@ void CaseMap::addDecors(sf::Sprite &sp)
 {
 	this->decors_add.push_back(&sp);
 }
+int  CaseMap::asDecors() const
+{
+	return (this->decors_add.size());
+}
+
 void CaseMap::addShadow(sf::Sprite &sp)
 {
 	this->shadow_add.push_back(&sp);
